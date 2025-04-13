@@ -1,0 +1,107 @@
+.left-form {
+    -fx-background-color: linear-gradient(to bottom right, #272b3f, #2196F3);
+    -fx-border-color: #000;
+    -fx-border-width: .4px 0px .4px .4px;
+}
+
+.shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 6, 0, 0, 0);
+}
+
+.white-bg {
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 8px;
+}
+
+.profil {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 6, 0, 0, 0);
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 50%;
+}
+
+.radius {
+    -fx-background-radius: 50%;
+}
+
+.none-background {
+    -fx-background-color: transparent;
+}
+
+.right-form {
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-width: .4px .4px .4px 0px;
+}
+
+.close {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.close:hover {
+    -fx-background-color: #ff3547;
+}
+
+.textfield {
+    -fx-background-color: linear-gradient(to bottom, #efefef, #eee);
+    -fx-background-radius: 4px;
+    -fx-border-color: #000;
+    -fx-border-width: .4px;
+    -fx-border-radius: 4px;
+    -fx-font-size: 13px;
+    -fx-font-family: "Arial";
+}
+
+.textfield:focused {
+    -fx-background-color: #fff;
+    -fx-border-color: linear-gradient(to bottom right, #272b3f, #2196F3);
+    -fx-border-width: .8px;
+}
+
+.login-btn {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    -fx-background-color: #2196F3;
+    /* Vous pouvez choisir une autre nuance de bleu ici, au lieu de #008489 si besoin */
+}
+
+.goto-signup {
+    -fx-background-color: white;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 4px;
+    -fx-border-color: white;
+    -fx-transition: background-color 0.3s, color 0.3s;
+}
+
+.goto-signup:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}
+
+.signup-btn {
+    -fx-border-color: #2196F3;
+    -fx-text-fill: #000;
+    -fx-font-size: 14px;
+    -fx-background-color: none;
+    -fx-cursor: hand;
+}
+
+.signup-btn:hover {
+    -fx-border-color: #2196F3;
+    -fx-background-color: none;
+}
+
+.uploadBtn {
+    -fx-background-color: transparent;
+}
