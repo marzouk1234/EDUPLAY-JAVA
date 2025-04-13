@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.Controller.AjouterevaluationController">
+    <children>
+        <AnchorPane fx:id="main_form" prefHeight="700.0" prefWidth="1100.0">
+            <children>
+                <BorderPane prefHeight="707.0" prefWidth="1100.0" stylesheets="@../mainStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <top>
+                        <AnchorPane prefHeight="45.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane layoutX="195.2" layoutY="-77.0" prefHeight="48.0" prefWidth="1069.0" styleClass="header" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <Button fx:id="close" layoutX="1043.0" layoutY="8.0" mnemonicParsing="false" styleClass="close">
+                                            <graphic>
+
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="minimize" layoutX="997.0" layoutY="8.0" mnemonicParsing="false" styleClass="minimize">
+                                            <graphic>
+
+                                            </graphic>
+                                        </Button>
+
+                                        <Label fx:id="username" layoutX="227.0" layoutY="15.0" prefHeight="17.0" prefWidth="350.0" text="Ajouter Evaluation" />
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </top>
+                    <left>
+                        <AnchorPane prefHeight="621.0" prefWidth="202.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane prefHeight="532.0" prefWidth="888.0" styleClass="shadow" stylesheets="@../mainStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <AnchorPane prefHeight="447.0" prefWidth="565.0" styleClass="white-bg" stylesheets="@../mainStyle.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane layoutY="-45.6" prefHeight="600.0" prefWidth="202.0" style="-fx-background-color: #666;" stylesheets="@../mainStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-46.0">
+                                    <children>
+                                        <Line endX="100.0" layoutX="102.0" layoutY="137.0" startX="-100.0" stroke="#dfdbdb" />
+                                        <Button fx:id="homePage_btn" layoutX="11.0" layoutY="154.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="home" text="Home">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="userPage_btn" layoutX="11.0" layoutY="198.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="users" text="Workshop">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="destinationPage_btn" layoutX="10.0" layoutY="243.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="destinations" text="Shop">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="produitPage_btn" layoutX="10.0" layoutY="288.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="produits" text="Chatbot">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="evaluationPage_btn" layoutX="12.0" layoutY="334.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="evaluations" text="Contact">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button layoutX="11.0" layoutY="382.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="evaluations" text="Review">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="sensibilisationPage_btn" layoutX="11.0" layoutY="430.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" styleClass="sensibilisations" text="Evaluation">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <Button fx:id="logout" layoutX="11.0" layoutY="509.0" mnemonicParsing="false" styleClass="logout">
+                                            <graphic>
+
+                                            </graphic>
+                                        </Button>
+
+                                        <Label layoutX="35.0" layoutY="111.0" style="-fx-text-fill: white;" text="TABLEAU DE BORD">
+                                            <graphic>
+
+                                            </graphic>
+                                        </Label>
+                                        <Button fx:id="sensibilisationPage_btn1" layoutX="12.0" layoutY="479.0" mnemonicParsing="false" onAction="#retour" prefHeight="30.0" prefWidth="180.0" styleClass="sensibilisations" text="Resultat">
+                                            <font>
+                                                <Font size="13.0" />
+                                            </font>
+                                        </Button>
+                                        <ImageView fitHeight="55.0" fitWidth="194.0" layoutX="6.0" layoutY="32.0">
+                                            <image>
+                                                <Image url="@../logo.png" />
+                                            </image>
+                                        </ImageView>
+
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </left>
+                    <center>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane fx:id="home_page" layoutX="10.0" layoutY="10.0" prefHeight="532.0" prefWidth="876.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <children>
+                                        <AnchorPane layoutY="0.6000000000000227" prefHeight="148.0" prefWidth="878.0" AnchorPane.bottomAnchor="385.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                            <children>
+                                                <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="118.0" prefWidth="188.0" styleClass="nav-form" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="674.0" AnchorPane.topAnchor="15.0">
+                                                    <children>
+
+                                                        <Label layoutX="54.0" layoutY="79.0" text="Total utilisateurs">
+                                                            <font>
+                                                                <Font size="17.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="home_totalUsers" alignment="CENTER_RIGHT" layoutX="106.0" layoutY="14.0" prefHeight="36.0" prefWidth="70.0" text="0">
+                                                            <font>
+                                                                <Font size="25.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane layoutX="245.0" layoutY="15.0" prefHeight="120.0" prefWidth="180.0" styleClass="nav-form">
+                                                    <children>
+
+                                                        <Label layoutX="41.0" layoutY="79.0" text="Total destinations">
+                                                            <font>
+                                                                <Font size="17.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label alignment="CENTER_RIGHT" layoutX="102.0" layoutY="14.0" prefHeight="36.0" prefWidth="70.0" text="0">
+                                                            <font>
+                                                                <Font size="25.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane layoutX="461.0" layoutY="15.0" prefHeight="120.0" prefWidth="180.0" styleClass="nav-form">
+                                                    <children>
+
+                                                        <Label layoutX="44.0" layoutY="80.0" text="Total commandes">
+                                                            <font>
+                                                                <Font size="17.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label alignment="CENTER_RIGHT" layoutX="109.0" layoutY="15.0" prefHeight="36.0" prefWidth="70.0" text="0">
+                                                            <font>
+                                                                <Font size="25.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane layoutX="678.0" layoutY="15.0" prefHeight="120.0" prefWidth="180.0" styleClass="nav-form" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                                                    <children>
+
+                                                        <Label layoutX="29.0" layoutY="81.0" text="Total Réclamations">
+                                                            <font>
+                                                                <Font size="17.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label alignment="CENTER_RIGHT" layoutX="99.0" layoutY="16.0" prefHeight="36.0" prefWidth="70.0" text="0">
+                                                            <font>
+                                                                <Font size="25.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </AnchorPane>
+                                            </children>
+                                            <styleClass>
+                                                <String fx:value="white-bg" />
+                                                <String fx:value="shadow" />
+                                            </styleClass>
+                                        </AnchorPane>
+                                        <BarChart fx:id="home_chart" layoutX="18.0" layoutY="179.0" prefHeight="338.0" prefWidth="462.0" title="Destinations populaires">
+                                            <xAxis>
+                                                <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                                <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                        </BarChart>
+                                        <PieChart id="home_pieChart" fx:id="home_pieChart" layoutX="494.0" layoutY="218.0" prefHeight="278.0" prefWidth="366.0" title="Utilisateurs - Rôles" />
+                                    </children>
+                                    <styleClass>
+                                        <String fx:value="shadow" />
+                                        <String fx:value="white-bg" />
+                                    </styleClass>
+                                </AnchorPane>
+                                <AnchorPane fx:id="user_page" styleClass="shadow" stylesheets="@../mainStyle.css">
+                                    <children>
+
+                              <!-- Champs texte -->
+                              <TextField fx:id="imageField" layoutX="50.0" layoutY="195.0" prefHeight="35.0" prefWidth="118.0" promptText="IMAGE événement" style="-fx-background-radius: 30;" />
+                              <TextField fx:id="titreField" layoutX="46.0" layoutY="119.0" prefHeight="35.0" prefWidth="126.0" promptText="Titre événement" style="-fx-background-radius: 30;" />
+                                        <ComboBox fx:id="typeCombo"
+                                                  layoutX="46.0"
+                                                  layoutY="315.0"
+                                                  prefHeight="35.0"
+                                                  prefWidth="126.0"
+                                                  promptText="Type"
+                                                  style="-fx-background-radius: 30;" />                              <DatePicker fx:id="dateField" layoutX="46.0" layoutY="356.0" prefHeight="35.0" prefWidth="126.0" promptText="Date Début" />
+                             <TextField fx:id="idField" layoutX="366.0" layoutY="288.0" opacity="0.0" prefHeight="35.0" prefWidth="92.0" promptText="ID événement" style="-fx-background-radius: 30;" />
+
+                              <!-- Boutons -->
+                              <Button fx:id="supprimerBoutton" layoutX="685.0" layoutY="567.0" onAction="#supprimerevaluation" prefHeight="44.0" prefWidth="180.0" style="-fx-background-radius: 30;" text="SUPPRIMER" textFill="#4dc366" />
+                              <Button fx:id="ajouterButton" layoutX="50.0" layoutY="567.0" onAction="#ajouterevaluation" prefHeight="44.0" prefWidth="180.0" style="-fx-background-radius: 30;" text="AJOUTER" textFill="#41c91b" />
+                              <Button fx:id="modifierBoutton" layoutX="354.0" layoutY="567.0" onAction="#modifierevaluation" prefHeight="44.0" prefWidth="180.0" style="-fx-background-radius: 30;" text="MODIFIER" textFill="#4bb508" />
+                              <Button fx:id="uploadButton" layoutX="81.0" layoutY="238.0" onAction="#uploadImage" prefHeight="25.0" prefWidth="57.0" text="upload" textFill="#57c922" />
+
+                              <!-- TableView -->
+                              <TableView fx:id="evaluationTv" layoutX="178.0" layoutY="228.0" onMouseClicked="#choisirev" prefHeight="192.0" prefWidth="766.0" style="-fx-background-color: #FFE4B5;">
+                                 <columns>
+                                    <TableColumn fx:id="titreCol" prefWidth="66.0" text="Titre" />
+                                    <TableColumn fx:id="typeCol" prefWidth="303.0" text="Type" />
+                                    <TableColumn fx:id="dateCol" prefWidth="246.0" text="Date Début" />
+                                    <TableColumn fx:id="imageCol" prefWidth="150.0" text="Image" />
+                                  </columns>
+                              </TableView>
+
+                              <!-- Recherche -->
+                              <TextField fx:id="rechercher" layoutX="785.0" layoutY="172.0" onKeyPressed="#rechercherev" prefHeight="25.0" prefWidth="161.0" promptText="Chercher par titre" />
+
+                              <!-- Images -->
+                              <ImageView fx:id="imageview" fitHeight="174.0" fitWidth="301.0" layoutX="476.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="QrCode" fitHeight="105.0" fitWidth="175.0" layoutX="21.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </AnchorPane>
+
+
+                                <AnchorPane fx:id="destination_page" layoutX="137.0" layoutY="55.0" prefHeight="554.4" prefWidth="896.8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <AnchorPane layoutX="67.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                            <styleClass>
+                                                <String fx:value="shadow" />
+                                                <String fx:value="white-bg" />
+                                            </styleClass>
+                                            <children>
+                                                <Label layoutX="271.0" layoutY="81.0" text="Gestion destinations">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane fx:id="produit_page" layoutX="10.0" layoutY="10.0" prefHeight="554.4" prefWidth="896.8" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <children>
+                                        <AnchorPane layoutX="67.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <styleClass>
+                                                <String fx:value="shadow" />
+                                                <String fx:value="white-bg" />
+                                            </styleClass>
+                                            <children>
+                                                <Label layoutX="271.0" layoutY="81.0" text="Gestion produits">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane layoutX="20.0" layoutY="20.0" prefHeight="554.4" prefWidth="896.8" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <children>
+                                        <AnchorPane layoutX="67.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <styleClass>
+                                                <String fx:value="shadow" />
+                                                <String fx:value="white-bg" />
+                                            </styleClass>
+                                            <children>
+                                                <Label layoutX="271.0" layoutY="81.0" text="Gestion événements">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane fx:id="evaluation_page" layoutX="20.0" layoutY="20.0" prefHeight="554.4" prefWidth="896.8" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <children>
+                                        <AnchorPane layoutX="67.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <styleClass>
+                                                <String fx:value="shadow" />
+                                                <String fx:value="white-bg" />
+                                            </styleClass>
+                                            <children>
+                                                <Label layoutX="271.0" layoutY="81.0" text="Gestion réclamations">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane fx:id="sensibilisation_page" layoutX="20.0" layoutY="20.0" prefHeight="554.4" prefWidth="896.8" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <children>
+                                        <AnchorPane layoutX="67.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <styleClass>
+                                                <String fx:value="shadow" />
+                                                <String fx:value="white-bg" />
+                                            </styleClass>
+                                            <children>
+                                                <Label layoutX="271.0" layoutY="81.0" text="Gestion Quiz">
+                                                    <font>
+                                                        <Font size="48.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+
+
+                            </children>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

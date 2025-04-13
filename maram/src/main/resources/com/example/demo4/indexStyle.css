@@ -1,0 +1,73 @@
+.primary_color {
+    -fx-background-color: #181818;
+}
+
+.secondary-color {
+    -fx-background-color: #121212;
+}
+
+/* Couleur verte initiale (#1ED760) remplacée par #2196F3 */
+.selected {
+    -fx-border-color: #2196F3;
+    -fx-border-width: 0 0 0 5;
+}
+
+.top-border {
+    -fx-border-color: #A1A1A1;
+    -fx-border-width: 1 0 0 0;
+}
+
+.search-container {
+    -fx-background-color: #fff;
+    -fx-background-radius: 100;
+}
+
+.upgrade-button {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: #fff;
+    -fx-border-radius: 50;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #181818;
+}
+
+/* Boutons de navigation */
+.button-nav {
+    -fx-background-color: transparent;
+    -fx-text-fill: #232121;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, #ccc, 5, 0, 0, 0);
+    -fx-transition: all 0.3s;
+}
+
+.button-nav:hover {
+    -fx-background-color: #666; /* Couleur de survol */
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, #666, 10, 0, 0, 0);
+}
+
+/* Couleur verte initiale (#45a049) remplacée par #2196F3 */
+.button-nav:pressed {
+    -fx-background-color: #2196F3; /* Couleur lorsqu'appuyé */
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, #2196F3, 10, 0, 0, 0);
+}
+
+.button-nav:disabled {
+    -fx-opacity: 0.5; /* Opacité lorsque désactivé */
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.button-profile {
+    -fx-border-color: white;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}

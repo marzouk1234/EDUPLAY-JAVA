@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="345.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.Controller.evaluationController">
+   <children>
+      <ImageView fx:id="imageview" fitHeight="114.0" fitWidth="323.0" layoutX="30.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
+
+      <Label fx:id="titreevLabel" layoutX="29.0" layoutY="140.0" prefHeight="24.0" prefWidth="250.0" text="Titre évènement">
+         <font>
+            <Font name="Lucida Bright" size="14.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="typeLabel" layoutX="29.0" layoutY="190.0" prefHeight="24.0" prefWidth="250.0" text="Type" />
+      <Label fx:id="dateLabel" layoutX="29.0" layoutY="215.0" prefHeight="24.0" prefWidth="250.0" text="Date Début" />
+      <Hyperlink fx:id="voirResultatsLink" layoutX="14.0" layoutY="271.0" onAction="#voirResultatsFront" prefHeight="23.0" prefWidth="342.0" text="Voir les resultats liées" />
+
+
+      <!-- Champs cachés -->
+      <TextField fx:id="idevF" layoutX="264.0" layoutY="270.0" opacity="0.0" prefHeight="0.0" prefWidth="2.0" />
+      <TextField fx:id="iduserF" layoutX="297.0" layoutY="271.0" opacity="0.0" prefHeight="0.0" prefWidth="7.0" />
+      <TextField fx:id="idPartField" layoutX="297.0" layoutY="267.0" opacity="0.0" prefHeight="32.0" prefWidth="0.0" />
+      <TextField fx:id="fullnameevField" layoutX="256.0" layoutY="265.0" opacity="0.0" prefHeight="25.0" prefWidth="0.0" />
+      <TextField fx:id="appreciationevField" layoutX="242.0" layoutY="287.0" opacity="0.0" prefHeight="8.0" prefWidth="0.0" />
+      <Button fx:id="annulerButton" layoutX="263.0" layoutY="282.0" opacity="0.0" />
+   </children>
+</AnchorPane>
