@@ -23,7 +23,8 @@
                 <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
                 <TableColumn fx:id="nomCoursColumn" text="Cours" prefWidth="200"/>
                 <TableColumn fx:id="dateColumn" text="Date d'inscription" prefWidth="200"/>
-                <TableColumn fx:id="supprimerCol" text="Action" prefWidth="100"/>
+                <TableColumn fx:id="supprimerCol" text="Supprimer" prefWidth="100"/>
+                <TableColumn fx:id="modifierCol" text="Modifier" prefWidth="100"/>
             </columns>
         </TableView>
     </center>
