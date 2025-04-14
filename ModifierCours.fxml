@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ModifierCoursController"
+            stylesheets="@style.css"
+            prefWidth="600" prefHeight="500"
+            styleClass="root">
+
+   <children>
+      <VBox spacing="10" alignment="TOP_LEFT" layoutX="40.0" layoutY="30.0">
+
+         <!-- Champ Titre -->
+         <TextField fx:id="titreField" promptText="Titre du cours" styleClass="input"/>
+         <Label fx:id="titreError" styleClass="erreur-label"/>
+
+         <!-- Champ Description -->
+         <TextArea fx:id="descriptionArea" promptText="Description" prefRowCount="3" styleClass="input"/>
+         <Label fx:id="descriptionError" styleClass="erreur-label"/>
+
+         <!-- Champ Nb Chapitres -->
+         <TextField fx:id="nbChapitreField" promptText="Nombre de chapitres" styleClass="input"/>
+         <Label fx:id="nbChapitreError" styleClass="erreur-label"/>
+
+         <!-- Champ Catégorie -->
+         <ComboBox fx:id="categorieCombo" promptText="Catégorie" prefWidth="200" styleClass="input"/>
+         <Label fx:id="categorieError" styleClass="erreur-label"/>
+
+         <!-- Champ Date -->
+         <DatePicker fx:id="datePicker" styleClass="input"/>
+         <Label fx:id="dateError" styleClass="erreur-label"/>
+
+         <!-- Champ PDF -->
+         <TextField fx:id="pdfField" promptText="Nom du fichier PDF" styleClass="input"/>
+         <Label fx:id="pdfError" styleClass="erreur-label"/>
+
+         <!-- Bouton Enregistrer -->
+         <Button fx:id="enregistrerBtn" text="Enregistrer les modifications" onAction="#modifierCours" styleClass="button"/>
+
+      </VBox>
+   </children>
+</AnchorPane>

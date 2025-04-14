@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ListeCoursController"
+            stylesheets="@style.css"
+            styleClass="root">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
+            <Label text="Liste des cours" styleClass="title-label"/>
+            <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="ajouterCoursBtn" onAction="#ouvrirFenetreAjoutCours" text="Ajouter un cours" styleClass="button"/>
+            <Button fx:id="voirInscriptionsBtn" onAction="#allerAuxInscriptions" text="Voir les inscriptions" styleClass="button"/>
+            <Button text="Retour au Dashboard" onAction="#goToDashboard" styleClass="button"/>
+        </HBox>
+    </top>
+
+    <!-- TableView Center -->
+    <center>
+        <TableView fx:id="coursTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
+                   BorderPane.alignment="CENTER" styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID"/>
+                <TableColumn fx:id="titreColumn" text="Titre"/>
+                <TableColumn fx:id="chapitresColumn" text="Nb Chapitres"/>
+                <TableColumn fx:id="descriptionColumn" text="Description"/>
+                <TableColumn fx:id="dateColumn" text="Date"/>
+                <TableColumn fx:id="categorieColumn" text="Catégorie"/>
+                <TableColumn fx:id="modifierCol" prefWidth="75" text="Modifier"/>
+                <TableColumn fx:id="supprimerCol" prefWidth="88" text="Supprimer"/>
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>

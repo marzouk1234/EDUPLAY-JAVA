@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AjouterCoursController"
+            stylesheets="@style.css"
+            prefWidth="600" prefHeight="500"
+            styleClass="root">
+
+   <children>
+      <VBox spacing="10" alignment="TOP_LEFT" layoutX="40.0" layoutY="30.0">
+
+         <!-- Champ Titre -->
+         <TextField fx:id="titreField" promptText="Titre du cours" styleClass="input"/>
+         <Label fx:id="titreErreurLabel" styleClass="erreur-label"/>
+
+         <!-- Champ Description -->
+         <TextArea fx:id="descriptionArea" promptText="Description" prefRowCount="3" styleClass="input"/>
+         <Label fx:id="descriptionErreurLabel" styleClass="erreur-label"/>
+
+         <!-- Champ Nb Chapitres -->
+         <Spinner fx:id="nbChapitresSpinner" prefWidth="200" styleClass="input"/>
+
+         <!-- Champ Catégorie -->
+         <ChoiceBox fx:id="categorieChoiceBox" prefWidth="200" styleClass="input"/>
+
+         <!-- Champ Date -->
+         <DatePicker fx:id="datePicker" styleClass="input"/>
+
+         <!-- Fichier PDF + erreur -->
+         <HBox spacing="10">
+            <Button fx:id="fichierButton" text="Choisir fichier" onAction="#choisirFichier"/>
+            <Label fx:id="fichierLabel" text="Aucun fichier sélectionné" styleClass="label"/>
+         </HBox>
+         <Label fx:id="pdfErreurLabel" styleClass="erreur-label"/>
+
+         <!-- Bouton Ajouter -->
+         <Button fx:id="ajouterButton" text="Ajouter Cours" onAction="#ajouterCours" styleClass="button"/>
+
+      </VBox>
+   </children>
+</AnchorPane>

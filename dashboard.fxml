@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.DashboardController"
+            stylesheets="@style.css">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="20" alignment="TOP_LEFT" style="-fx-background-color: #2C3E50; -fx-padding: 20;">
+            <children>
+                <!-- Logo -->
+                <ImageView fitHeight="100" fitWidth="100" styleClass="image-view">
+
+                <image>
+                        <Image url="@/images/logo.png"/>
+                    </image>
+                </ImageView>
+
+                <!-- Titre -->
+                <Label text="Bienvenue chez EDUPLAY" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
+
+                <!-- Boutons -->
+                <Button text="Home "  styleClass="button"/>
+                <Button text="Liste des Inscriptions" onAction="#goToListeInscriptions" styleClass="button"/>
+                <Button text="Liste des Cours" onAction="#goToListeCours" styleClass="button"/>
+                <Button text="Liste des Evaluations"  styleClass="button"/>
+                <Button text="Liste des Resultats"  styleClass="button"/>
+                <Button text="Liste des jeux "  styleClass="button"/>
+                <Button text="Liste des fedbacks "  styleClass="button"/>
+
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox alignment="CENTER" spacing="60">
+            <children>
+                <Label text="Bienvenue chez nous EDUPLAY" styleClass="label"/>
+                <ImageView fitWidth="200" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/bienvenue.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </VBox>
+    </center>
+
+
+</BorderPane>

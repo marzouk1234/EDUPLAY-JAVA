@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AjouterInscriptionController"
+            stylesheets="@style.css"
+            prefWidth="600" prefHeight="450"
+            styleClass="root">
+
+    <VBox alignment="CENTER" spacing="20" layoutX="50" layoutY="30" prefWidth="300" AnchorPane.topAnchor="20.0"
+          AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.bottomAnchor="20.0">
+
+        <Label text="Ajouter une Inscription" styleClass="header-label"/>
+
+        <ComboBox fx:id="coursComboBox" promptText="Sélectionner un cours" styleClass="input-field"/>
+
+        <DatePicker fx:id="dateInscription" promptText="Date d'inscription" styleClass="input-field"/>
+        <Button fx:id="ajouter" text="Ajouter inscription " onAction="#ajouterInscription" styleClass="button"/>
+    </VBox>
+        </AnchorPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.ListeInscriptionController"
+            stylesheets="@style.css">
+
+    <!-- Barre en haut avec bouton "Ajouter une inscription" -->
+    <top>
+        <ToolBar>
+            <Button text="Ajouter une inscription" onAction="#ouvrirFenetreAjoutInscription"/>
+            <Button text="Retour au Dashboard" onAction="#goToDashboard"/>
+        </ToolBar>
+    </top>
+
+    <!-- TableView au centre -->
+    <center>
+        <TableView fx:id="inscriptionTable" prefWidth="600" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="nomCoursColumn" text="Cours" prefWidth="200"/>
+                <TableColumn fx:id="dateColumn" text="Date d'inscription" prefWidth="200"/>
+                <TableColumn fx:id="supprimerCol" text="Action" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Marge autour du contenu si besoin -->
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+</BorderPane>
