@@ -1,0 +1,30 @@
+package Main;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class Test extends Application { // Hérite de Application
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        // Charge le fichier FXML
+        Parent root = FXMLLoader.load(getClass().getResource("/event.fxml"));
+
+        // Configure la scène
+        Scene scene = new Scene(root, 800, 600);
+
+        // Configure la fenêtre
+        primaryStage.setTitle("Gestion des Événements");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

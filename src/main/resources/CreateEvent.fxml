@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.create">
+   <children>
+      <TextField fx:id="nom" layoutX="204.0" layoutY="85.0" />
+      <TextField fx:id="desc" layoutX="204.0" layoutY="163.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text layoutX="65.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de l'evenement " />
+      <Text layoutX="71.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description " wrappingWidth="62.0" />
+      <Text layoutX="132.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text layoutX="442.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image" />
+      <Button fx:id="cr" layoutX="248.0" layoutY="337.0" mnemonicParsing="false" text="Create event" />
+      <Text layoutX="91.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" wrappingWidth="62.0" />
+      <ImageView fx:id="img" fitHeight="150.0" fitWidth="138.0" layoutX="442.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="par" layoutX="497.0" layoutY="85.0" mnemonicParsing="false" text="Parcourir" />
+      <DatePicker fx:id="date" layoutX="179.0" layoutY="220.0" />
+   </children>
+</AnchorPane>
