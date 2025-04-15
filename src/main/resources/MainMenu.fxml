@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controllers.MainMenuController"
+      prefHeight="400.0" prefWidth="600.0"
+      spacing="20" alignment="CENTER">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="EduPlay - Menu Principal" 
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    
+    <Button text="Gestion des Formulaires" 
+            onAction="#handleOpenFormulaires"
+            prefWidth="200"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+    
+    <Button text="Gestion des Aides" 
+            onAction="#handleOpenAides"
+            prefWidth="200"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+</VBox> 
