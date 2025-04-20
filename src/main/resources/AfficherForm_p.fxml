@@ -10,58 +10,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f0f0;"
+<AnchorPane fx:id="rootPane"
+            prefHeight="600.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.AfficherForm_pController">
-    <children>
-        <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="560.0" prefWidth="860.0" spacing="15.0">
-            <children>
-                <Label text="Liste des Formulaires" textAlignment="CENTER">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-                
-                <TableView fx:id="formTable" prefHeight="400.0" prefWidth="860.0">
-                    <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
-                        <TableColumn fx:id="sujetColumn" prefWidth="200.0" text="Sujet" />
-                        <TableColumn fx:id="contenuColumn" prefWidth="300.0" text="Contenu" />
-                        <TableColumn fx:id="dateColumn" prefWidth="120.0" text="Date de Publication" />
-                        <TableColumn fx:id="auteurColumn" prefWidth="150.0" text="Auteur" />
-                    </columns>
-                </TableView>
-                
-                <HBox alignment="CENTER" spacing="20.0">
-                    <children>
-                        <Button fx:id="ajouterButton" mnemonicParsing="false" onAction="#handleAjouter" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
-                        <Button fx:id="modifierButton" mnemonicParsing="false" onAction="#handleModifier" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Modifier">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
-                        <Button fx:id="supprimerButton" mnemonicParsing="false" onAction="#handleSupprimer" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Supprimer">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
-                    </children>
-                    <padding>
-                        <Insets top="20.0" />
-                    </padding>
-                </HBox>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
-    </children>
-</AnchorPane> 
+            fx:controller="Controllers.AfficherForm_pController"
+            stylesheets="@style.css"
+            styleClass="root">
+
+    <VBox spacing="15" alignment="CENTER"
+          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <Label text="Liste des Formulaires" styleClass="title-label"/>
+
+        <TableView fx:id="formTable" prefHeight="400.0" prefWidth="860.0"
+                   styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="sujetColumn" text="Sujet" prefWidth="200"/>
+                <TableColumn fx:id="contenuColumn" text="Contenu" prefWidth="300"/>
+                <TableColumn fx:id="dateColumn" text="Date de Publication" prefWidth="120"/>
+                <TableColumn fx:id="auteurColumn" text="Auteur" prefWidth="150"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="ajouterButton" onAction="#handleAjouter" text="Ajouter" styleClass="button-primary"/>
+            <Button fx:id="modifierButton" onAction="#handleModifier" text="Modifier" styleClass="button-info"/>
+            <Button fx:id="supprimerButton" onAction="#handleSupprimer" text="Supprimer" styleClass="button-danger"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

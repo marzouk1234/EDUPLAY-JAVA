@@ -35,6 +35,27 @@ public class ModifierAideController {
         aideService = new AideService();
         formService = new Form_pService();
         loadForms();
+
+        // Validation en temps réel et mise en évidence des erreurs de saisie avec un contour rouge
+        sujetField.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText.trim().length() < 3) {
+                sujetField.setStyle("-fx-border-color: red;");
+                messageLabel.setText("Le sujet doit contenir au moins 3 caractères");
+            } else {
+                sujetField.setStyle("");  // Réinitialiser le style
+                messageLabel.setText("");
+            }
+        });
+
+        descriptionArea.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText.trim().length() < 10) {
+                descriptionArea.setStyle("-fx-border-color: red;");
+                messageLabel.setText("La description doit contenir au moins 10 caractères");
+            } else {
+                descriptionArea.setStyle("");  // Réinitialiser le style
+                messageLabel.setText("");
+            }
+        });
     }
 
     public void setAide(Aide aide) {
@@ -47,30 +68,21 @@ public class ModifierAideController {
             List<Form_p> forms = formService.getAll();
             formComboBox.getItems().clear();
             formComboBox.getItems().addAll(forms);
-            
-            // Configuration de l'affichage des items dans la ComboBox
+
+            // Affichage personnalisé dans la ComboBox
             formComboBox.setCellFactory(param -> new ListCell<Form_p>() {
                 @Override
                 protected void updateItem(Form_p item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getSujet());
-                    }
+                    setText((empty || item == null) ? null : item.getSujet());
                 }
             });
-            
-            // Configuration de l'affichage de l'item sélectionné
+
             formComboBox.setButtonCell(new ListCell<Form_p>() {
                 @Override
                 protected void updateItem(Form_p item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getSujet());
-                    }
+                    setText((empty || item == null) ? null : item.getSujet());
                 }
             });
         } catch (SQLException e) {
@@ -84,8 +96,7 @@ public class ModifierAideController {
             sujetField.setText(aide.getSujet());
             descriptionArea.setText(aide.getDescription());
             dateCreationPicker.setValue(aide.getDateCreation().toLocalDate());
-            
-            // Sélectionner le formulaire associé
+
             for (Form_p form : formComboBox.getItems()) {
                 if (form.getId() == aide.getFormId()) {
                     formComboBox.setValue(form);
@@ -105,10 +116,10 @@ public class ModifierAideController {
             aide.setSujet(sujetField.getText().trim());
             aide.setDescription(descriptionArea.getText().trim());
             aide.setDateCreation(LocalDateTime.of(
-                dateCreationPicker.getValue(),
-                aide.getDateCreation().toLocalTime()
+                    dateCreationPicker.getValue(),
+                    aide.getDateCreation().toLocalTime()
             ));
-            
+
             Form_p selectedForm = formComboBox.getValue();
             if (selectedForm != null) {
                 aide.setFormId(selectedForm.getId());
@@ -116,19 +127,17 @@ public class ModifierAideController {
 
             aideService.update(aide);
             messageLabel.setText("Aide modifiée avec succès");
-            
-            // Fermer la fenêtre après 1 seconde
+
+            // Fermeture automatique après 1 seconde
             new Thread(() -> {
                 try {
                     Thread.sleep(1000);
-                    javafx.application.Platform.runLater(() -> {
-                        getStage().close();
-                    });
+                    javafx.application.Platform.runLater(() -> getStage().close());
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }).start();
-            
+
         } catch (SQLException e) {
             messageLabel.setText("Erreur lors de la modification: " + e.getMessage());
         }
@@ -140,26 +149,53 @@ public class ModifierAideController {
     }
 
     private boolean validateInputs() {
-        if (sujetField.getText().trim().isEmpty()) {
+        String sujet = sujetField.getText().trim();
+        String description = descriptionArea.getText().trim();
+        LocalDateTime now = LocalDateTime.now();
+
+        boolean valid = true;
+
+        if (sujet.isEmpty()) {
+            sujetField.setStyle("-fx-border-color: red;");
             messageLabel.setText("Le sujet est obligatoire");
-            return false;
+            valid = false;
+        } else if (sujet.length() < 3) {
+            sujetField.setStyle("-fx-border-color: red;");
+            messageLabel.setText("Le sujet doit contenir au moins 3 caractères");
+            valid = false;
+        } else {
+            sujetField.setStyle(""); // Réinitialiser le style si valide
         }
-        if (descriptionArea.getText().trim().isEmpty()) {
+
+        if (description.isEmpty()) {
+            descriptionArea.setStyle("-fx-border-color: red;");
             messageLabel.setText("La description est obligatoire");
-            return false;
+            valid = false;
+        } else if (description.length() < 10) {
+            descriptionArea.setStyle("-fx-border-color: red;");
+            messageLabel.setText("La description doit contenir au moins 10 caractères");
+            valid = false;
+        } else {
+            descriptionArea.setStyle(""); // Réinitialiser le style si valide
         }
+
         if (formComboBox.getValue() == null) {
             messageLabel.setText("Veuillez sélectionner un formulaire");
-            return false;
+            valid = false;
         }
+
         if (dateCreationPicker.getValue() == null) {
             messageLabel.setText("La date de création est obligatoire");
-            return false;
+            valid = false;
+        } else if (dateCreationPicker.getValue().isAfter(now.toLocalDate())) {
+            messageLabel.setText("La date de création ne peut pas être dans le futur");
+            valid = false;
         }
-        return true;
+
+        return valid;
     }
 
     private Stage getStage() {
         return (Stage) sujetField.getScene().getWindow();
     }
-} 
+}

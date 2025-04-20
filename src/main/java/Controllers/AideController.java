@@ -1,7 +1,9 @@
 package Controllers;
 
 import Models.Aide;
+import Models.Form_p;
 import Services.AideService;
+import Services.Form_pService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +19,9 @@ import javafx.beans.property.SimpleStringProperty;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AideController {
     @FXML
@@ -37,12 +42,16 @@ public class AideController {
     private Label statusLabel;
 
     private AideService aideService;
+    private Form_pService formService;
     private ObservableList<Aide> aideList;
+    private Map<Integer, String> formSujets;
 
     @FXML
     public void initialize() {
         aideService = new AideService();
+        formService = new Form_pService();
         aideList = FXCollections.observableArrayList();
+        formSujets = new HashMap<>();
 
         // Configuration des colonnes
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -54,17 +63,30 @@ public class AideController {
             return new SimpleStringProperty(formattedDate);
         });
         formSujetColumn.setCellValueFactory(cellData -> {
-            // TODO: Récupérer le sujet du formulaire associé
-            return new SimpleStringProperty("À implémenter");
+            int formId = cellData.getValue().getFormId();
+            String sujet = formSujets.getOrDefault(formId, "Non associé");
+            return new SimpleStringProperty(sujet);
         });
 
         // Chargement des données
         loadAides();
+        loadFormSujets();
 
         // Configuration de la recherche
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filterAides(newValue);
         });
+    }
+
+    private void loadFormSujets() {
+        try {
+            List<Form_p> forms = formService.getAll();
+            for (Form_p form : forms) {
+                formSujets.put(form.getId(), form.getSujet());
+            }
+        } catch (SQLException e) {
+            statusLabel.setText("Erreur lors du chargement des formulaires: " + e.getMessage());
+        }
     }
 
     private void loadAides() {
@@ -166,5 +188,6 @@ public class AideController {
     @FXML
     private void handleRefresh() {
         loadAides();
+        loadFormSujets();
     }
 } 

@@ -7,38 +7,45 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.ModifierAideController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" 
+            prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@style.css"
+            styleClass="root">
+
+    <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
           AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
-        
-        <Label text="Modifier une aide" styleClass="title-label"/>
-        
+
+        <Label text="Modifier une aide" styleClass="form-title"/>
+
         <GridPane vgap="10" hgap="10">
-            <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <Label fx:id="idLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-            
-            <Label text="Sujet:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="sujetField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-            
-            <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <TextArea fx:id="descriptionArea" wrapText="true" prefRowCount="3" 
-                     GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-            
-            <Label text="Formulaire associé:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="formComboBox" prefWidth="200" 
-                     GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-            
-            <Label text="Date de création:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-            <DatePicker fx:id="dateCreationPicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+            <Label fx:id="idLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-value"/>
+
+            <Label text="Sujet:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+            <TextField fx:id="sujetField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       styleClass="form-field"/>
+
+            <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+            <TextArea fx:id="descriptionArea" wrapText="true" prefRowCount="3"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1"
+                      styleClass="form-field"/>
+
+            <Label text="Formulaire associé:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+            <ComboBox fx:id="formComboBox" prefWidth="200"
+                      GridPane.rowIndex="3" GridPane.columnIndex="1"
+                      styleClass="form-field"/>
+
+            <Label text="Date de création:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
+            <DatePicker fx:id="dateCreationPicker" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                        styleClass="form-field"/>
         </GridPane>
-        
+
         <Region VBox.vgrow="ALWAYS"/>
-        
+
         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Label fx:id="messageLabel" styleClass="message-label"/>
+            <Label fx:id="messageLabel" styleClass="status-label"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Annuler" onAction="#handleAnnuler" styleClass="button-secondary"/>
-            <Button text="Enregistrer" onAction="#handleEnregistrer" styleClass="button-primary"/>
+            <Button text="Annuler" onAction="#handleAnnuler" styleClass="cancel-button"/>
+            <Button text="Enregistrer" onAction="#handleEnregistrer" styleClass="save-button"/>
         </HBox>
     </VBox>
-</AnchorPane> 
+</AnchorPane>

@@ -4,40 +4,44 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.AideController"
-            prefHeight="600.0" prefWidth="800.0">
-    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" 
-          AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
-        
-        <Label text="Liste des Aides" styleClass="title-label" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-        
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Button text="Ajouter" onAction="#handleAjouterAide" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-            <Button text="Modifier" onAction="#handleModifierAide" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
-            <Button text="Supprimer" onAction="#handleSupprimerAide" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
-            <Region HBox.hgrow="ALWAYS"/>
+            stylesheets="@style.css"
+            styleClass="root">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
+            <Label text="Liste des Aides" styleClass="title-label"/>
             <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="200"/>
+            <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="ajouterAideBtn" onAction="#handleAjouterAide" text="Ajouter une aide" styleClass="button"/>
+            <Button fx:id="modifierAideBtn" onAction="#handleModifierAide" text="Modifier une aide" styleClass="button"/>
+            <Button fx:id="supprimerAideBtn" onAction="#handleSupprimerAide" text="Supprimer une aide" styleClass="button"/>
+            <Button fx:id="refreshBtn" onAction="#handleRefresh" text="Actualiser" styleClass="button"/>
         </HBox>
-        
-        <TableView fx:id="aideTable" VBox.vgrow="ALWAYS">
+    </top>
+
+    <!-- TableView Center -->
+    <center>
+        <TableView fx:id="aideTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
+                   BorderPane.alignment="CENTER" styleClass="table-view">
             <columns>
                 <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
                 <TableColumn fx:id="sujetColumn" text="Sujet" prefWidth="150"/>
                 <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
                 <TableColumn fx:id="dateCreationColumn" text="Date de création" prefWidth="150"/>
-                <TableColumn fx:id="formSujetColumn" text="Formulaire associé" prefWidth="200"/>
+                <TableColumn fx:id="formSujetColumn" text="Formulaire associé" prefWidth="150"/>
             </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
         </TableView>
-        
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Label fx:id="statusLabel" style="-fx-text-fill: #666;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Actualiser" onAction="#handleRefresh" style="-fx-background-color: #607D8B; -fx-text-fill: white;"/>
+    </center>
+
+    <!-- Bottom Bar (Optional for Status Label) -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="bottom-bar">
+            <Label fx:id="statusLabel" styleClass="status-label"/>
         </HBox>
-    </VBox>
-</AnchorPane> 
+    </bottom>
+
+</BorderPane>

@@ -8,88 +8,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f0f0f0;"
+<AnchorPane fx:id="rootPane" prefHeight="500.0" prefWidth="700.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.AjouterForm_pController">
-    <children>
-        <VBox alignment="CENTER" layoutX="50.0" layoutY="30.0" prefHeight="440.0" prefWidth="600.0" spacing="20.0">
-            <children>
-                <Label text="Ajouter un Nouveau Formulaire" textAlignment="CENTER">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-                
-                <VBox spacing="10.0">
-                    <children>
-                        <Label text="Sujet:" styleClass="form-label">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="sujetField" promptText="Entrez le sujet du formulaire" />
-                    </children>
-                </VBox>
-                
-                <VBox spacing="10.0">
-                    <children>
-                        <Label text="Contenu:" styleClass="form-label">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="contenuField" prefHeight="100.0" promptText="Entrez le contenu du formulaire" />
-                    </children>
-                </VBox>
-                
-                <VBox spacing="10.0">
-                    <children>
-                        <Label text="Date de publication:" styleClass="form-label">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <DatePicker fx:id="datePicker" prefWidth="600.0" promptText="Sélectionnez une date" />
-                    </children>
-                </VBox>
-                
-                <VBox spacing="10.0">
-                    <children>
-                        <Label text="Auteur:" styleClass="form-label">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="auteurField" promptText="Entrez le nom de l'auteur" />
-                    </children>
-                </VBox>
-                
-                <HBox alignment="CENTER" spacing="20.0">
-                    <children>
-                        <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleFormSubmission" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#handleCancelButton" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Annuler">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
-                    </children>
-                    <padding>
-                        <Insets top="20.0" />
-                    </padding>
-                </HBox>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
+            fx:controller="Controllers.AjouterForm_pController"
+            stylesheets="@style.css"
+            styleClass="root">
+
+    <VBox spacing="15" alignment="CENTER"
+          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <Label text="Ajouter un Nouveau Formulaire" styleClass="title-label"/>
+
+        <VBox spacing="10">
+            <Label text="Sujet:" styleClass="form-label"/>
+            <TextField fx:id="sujetField" promptText="Entrez le sujet du formulaire"/>
         </VBox>
-    </children>
+
+        <VBox spacing="10">
+            <Label text="Contenu:" styleClass="form-label"/>
+            <TextField fx:id="contenuField" prefHeight="100.0" promptText="Entrez le contenu du formulaire"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Date de publication:" styleClass="form-label"/>
+            <DatePicker fx:id="datePicker" promptText="Sélectionnez une date"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Auteur:" styleClass="form-label"/>
+            <TextField fx:id="auteurField" promptText="Entrez le nom de l'auteur"/>
+        </VBox>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="submitButton" onAction="#handleFormSubmission" text="Ajouter" styleClass="button-primary"/>
+            <Button fx:id="cancelButton" onAction="#handleCancelButton" text="Annuler" styleClass="button-danger"/>
+        </HBox>
+    </VBox>
 </AnchorPane>

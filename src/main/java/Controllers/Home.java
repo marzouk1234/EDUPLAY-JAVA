@@ -15,7 +15,7 @@ public class Home extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Charger le menu principal
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
         Parent root = loader.load();
         
         // Configurer la scène

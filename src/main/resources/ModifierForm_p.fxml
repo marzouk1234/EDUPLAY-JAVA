@@ -13,16 +13,17 @@
 <AnchorPane fx:id="rootPane" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f0f0f0;"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.ModifierForm_pController">
+            fx:controller="Controllers.ModifierForm_pController"
+            stylesheets="@style.css">
     <children>
         <VBox alignment="CENTER" layoutX="50.0" layoutY="30.0" prefHeight="440.0" prefWidth="600.0" spacing="20.0">
             <children>
-                <Label text="Modifier le Formulaire" textAlignment="CENTER">
+                <Label text="Modifier le Formulaire" textAlignment="CENTER" styleClass="title-label">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-                
+
                 <VBox spacing="10.0">
                     <children>
                         <Label text="ID:" styleClass="form-label">
@@ -30,10 +31,10 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="idField" editable="false" style="-fx-background-color: #e0e0e0;" />
+                        <TextField fx:id="idField" editable="false" styleClass="text-field-disabled" />
                     </children>
                 </VBox>
-                
+
                 <VBox spacing="10.0">
                     <children>
                         <Label text="Sujet:" styleClass="form-label">
@@ -41,10 +42,10 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="sujetField" promptText="Entrez le sujet du formulaire" />
+                        <TextField fx:id="sujetField" promptText="Entrez le sujet du formulaire" styleClass="text-field" />
                     </children>
                 </VBox>
-                
+
                 <VBox spacing="10.0">
                     <children>
                         <Label text="Contenu:" styleClass="form-label">
@@ -52,10 +53,10 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="contenuField" prefHeight="100.0" promptText="Entrez le contenu du formulaire" />
+                        <TextField fx:id="contenuField" prefHeight="100.0" promptText="Entrez le contenu du formulaire" styleClass="text-field" />
                     </children>
                 </VBox>
-                
+
                 <VBox spacing="10.0">
                     <children>
                         <Label text="Date de publication:" styleClass="form-label">
@@ -63,10 +64,10 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <DatePicker fx:id="datePicker" prefWidth="600.0" promptText="Sélectionnez une date" />
+                        <DatePicker fx:id="datePicker" prefWidth="600.0" promptText="Sélectionnez une date" styleClass="text-field" />
                     </children>
                 </VBox>
-                
+
                 <VBox spacing="10.0">
                     <children>
                         <Label text="Auteur:" styleClass="form-label">
@@ -74,20 +75,20 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="auteurField" promptText="Entrez le nom de l'auteur" />
+                        <TextField fx:id="auteurField" promptText="Entrez le nom de l'auteur" styleClass="text-field" />
                     </children>
                 </VBox>
-                
+
                 <HBox alignment="CENTER" spacing="20.0">
                     <children>
-                        <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleUpdateSubmission" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Mettre à jour">
+                        <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleUpdateSubmission"
+                                prefHeight="40.0" prefWidth="150.0" text="Mettre à jour" styleClass="button-primary">
                             <font>
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#handleCancelButton" 
-                                prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Annuler">
+                        <Button mnemonicParsing="false" onAction="#handleCancelButton"
+                                prefHeight="40.0" prefWidth="150.0" text="Annuler" styleClass="button-danger">
                             <font>
                                 <Font name="System Bold" size="14.0" />
                             </font>
@@ -103,4 +104,4 @@
             </padding>
         </VBox>
     </children>
-</AnchorPane> 
+</AnchorPane>
