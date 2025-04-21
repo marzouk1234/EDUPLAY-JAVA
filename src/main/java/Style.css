@@ -1,0 +1,129 @@
+/* Style pour la racine (background, padding, police) */
+.root {
+    -fx-background-color: #cceeff; /* bleu ciel */
+    -fx-padding: 20;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Style pour les champs de texte (TextField, TextArea, ComboBox, DatePicker) */
+.input, .text-field, .text-area, .combo-box, .date-picker {
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+}
+
+/* Style pour la zone de texte (TextArea) */
+.text-area {
+    -fx-pref-row-count: 4;
+    -fx-wrap-text: true;
+}
+
+/* Style pour les labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* Style pour les messages d'erreur */
+.erreur-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #007ACC;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16;
+}
+
+.button:hover {
+    -fx-background-color: #005f99;
+}
+
+/* Style pour les labels (textes et boutons dans la barre supérieure, etc.) */
+.top-bar, .tool-bar {
+    -fx-background-color: #34495E;
+    -fx-padding: 10;
+}
+
+.title-label, .header-label {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.title-label {
+    -fx-font-size: 24px;
+}
+
+.header-label {
+    -fx-text-fill: #F39C12; /* couleur orange */
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* Style pour la TableView */
+.table-view {
+    -fx-background-color: #D6EAF8; /* Bleu ciel */
+    -fx-border-color: #AED6F1;
+    -fx-border-radius: 8;
+    -fx-padding: 10;
+    -fx-table-cell-border-color: transparent;
+    -fx-control-inner-background: #D6EAF8;
+    -fx-selection-bar: #85C1E9;
+    -fx-selection-bar-text: black;
+}
+
+.table-column {
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #85C1E9;
+}
+
+/* Style pour les ComboBox et DatePicker */
+.combo-box, .date-picker {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-background-color: white;
+    -fx-padding: 5 10;
+}
+
+/* Style pour l'ImageView (si utilisé) */
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+}
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 11px;
+}
+.erreur-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+}
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.button {
+    -fx-background-color: #2196F3; /* Bleu */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1976D2; /* Bleu un peu plus foncé au survol */
+}

@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Utils.DataSource.connection;
+
 public class GameService1 implements IService<Game> {
     private Connection conn;
 
@@ -67,4 +69,26 @@ public class GameService1 implements IService<Game> {
         }
         return list;
     }
+    public Game getGameById(int id) {
+        Game game = null;
+        String query = "SELECT * FROM game WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                game = new Game(
+                        rs.getInt("id"),
+                        rs.getString("nom")
+                        // Add other fields if needed
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return game;  // Will return null if no game is found
+    }
+
 }

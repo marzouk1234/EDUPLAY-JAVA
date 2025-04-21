@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import Controllers.UpdateFeed?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.UpdateGame"
+            stylesheets="@ Style.css"
+            prefWidth="600" prefHeight="500"
+            styleClass="root">
+
+    <children>
+        <VBox spacing="10" alignment="TOP_LEFT" layoutX="40.0" layoutY="30.0">
+
+            <!-- Champ ID -->
+            <HBox>
+                <Label text="N°" prefWidth="80"/>
+                <TextField fx:id="tfId" promptText="ID" />
+            </HBox>
+
+            <!-- Champ Nom -->
+            <HBox>
+                <Label text="Name" prefWidth="80"/>
+                <TextField fx:id="tfNom" promptText="Name" />
+            </HBox>
+
+            <!-- Champ Prénom -->
+            <HBox>
+                <Label text="Surname" prefWidth="80"/>
+                <TextField fx:id="tfPrenom" promptText="Surname" />
+            </HBox>
+
+            <!-- Champ Feedback -->
+            <HBox>
+                <ComboBox fx:id="cbType" promptText="Select Type">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </ComboBox>
+            </HBox>
+
+            <!-- Champ Rating -->
+            <HBox>
+                <DatePicker fx:id="tfDate">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </DatePicker>
+            </HBox>
+
+            <!-- Bouton Ajouter Feedback -->
+            <Button fx:id="ajouterFeedbackButton" text="Ajouter Feedback" onAction="#handleUpdate" styleClass="button"/>
+
+        </VBox>
+    </children>
+</AnchorPane>

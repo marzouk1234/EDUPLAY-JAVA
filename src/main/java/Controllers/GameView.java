@@ -1,14 +1,20 @@
 package Controllers;
 
+import Models.Feedback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import Models.Game;
 import Services.GameService1;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 
@@ -24,7 +30,7 @@ public class GameView {
     @FXML private TextField tfId;
     @FXML private TextField tfNom;
     @FXML private TextField tfPrenom;
-    @FXML private TextField tfType;
+    @FXML private ComboBox<String> cbType;
     @FXML private DatePicker tfDate;
 
     @FXML private Button btnAdd;
@@ -43,6 +49,8 @@ public class GameView {
         try {
             gameService = new GameService1();
             loadTable();
+
+            //cbType.setItems(FXCollections.observableArrayList("puzzle", "snake", "chess"));
         } catch (SQLException e) {
             showError("Erreur de connexion", e.getMessage());
         }
@@ -52,7 +60,6 @@ public class GameView {
         try {
             ObservableList<Game> list = FXCollections.observableArrayList(gameService.afficher());
             gameTable.setItems(list);
-            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
             colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
             colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
             colType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -61,23 +68,22 @@ public class GameView {
             showError("Erreur lors du chargement", e.getMessage());
         }
     }
+
     private void clearForm() {
         tfId.clear();
         tfNom.clear();
         tfPrenom.clear();
-        tfType.clear();
+        cbType.setValue(null);
         tfDate.setValue(null);
     }
-
 
     @FXML
     void handleAdd(ActionEvent event) {
         try {
-            // Check if fields are empty
             if (tfId.getText().isEmpty() ||
                     tfNom.getText().isEmpty() ||
                     tfPrenom.getText().isEmpty() ||
-                    tfType.getText().isEmpty() ||
+                    cbType.getValue() == null ||
                     tfDate.getValue() == null) {
                 showError("Champs obligatoires", "Tous les champs doivent être remplis.");
                 return;
@@ -85,7 +91,6 @@ public class GameView {
 
             int id = Integer.parseInt(tfId.getText());
 
-            // Check if id is positive
             if (id <= 0) {
                 showError("ID invalide", "L'ID doit être un nombre positif.");
                 return;
@@ -95,16 +100,14 @@ public class GameView {
                     id,
                     tfNom.getText().trim(),
                     tfPrenom.getText().trim(),
-                    tfType.getText().trim(),
+                    cbType.getValue(),
                     Date.valueOf(tfDate.getValue())
             );
 
             gameService.ajouter(game);
             showInfo("Ajout réussi !");
-            loadTable();
-
-            // Optionally clear form
             clearForm();
+            loadTable();
 
         } catch (NumberFormatException e) {
             showError("ID invalide", "L'ID doit être un nombre entier.");
@@ -114,7 +117,6 @@ public class GameView {
         }
     }
 
-
     @FXML
     void handleUpdate(ActionEvent event) {
         try {
@@ -122,8 +124,8 @@ public class GameView {
                     Integer.parseInt(tfId.getText()),
                     tfNom.getText(),
                     tfPrenom.getText(),
-                    tfType.getText(),
-                    Date.valueOf(tfDate.getValue().toString())
+                    cbType.getValue(),
+                    Date.valueOf(tfDate.getValue())
             );
             gameService.modifier(game);
             showInfo("Modification réussie !");
@@ -164,4 +166,62 @@ public class GameView {
         alert.setContentText(msg);
         alert.show();
     }
+    @FXML
+    void openAjouterGame() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterGame.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter Game");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            showError("Error", "Failed to load Add game window: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void openUpdateGame() {
+        Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
+        if (selectedGame == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucune sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner un jeu à modifier.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateGame.fxml"));
+            Parent root = loader.load();
+
+            // Passer le jeu sélectionné au contrôleur UpdateGame
+            UpdateGame controller = loader.getController();
+            controller.setGameToEdit(selectedGame);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier un jeu");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void goToMainView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) gameTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Main View");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

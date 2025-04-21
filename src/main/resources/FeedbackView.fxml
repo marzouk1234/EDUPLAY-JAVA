@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import Controllers.UpdateFeed?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.FeedbackView"
+            stylesheets="@Style.css"
+            styleClass="root">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
+            <Button text="Add" onAction="#openAjouterFeed" styleClass="button"/>
+            <Button text="Update" onAction="#openUpdateFeed" styleClass="button" />
+            <Button text="Delete" onAction="#handleDelete" styleClass="button" />
+            <Button text="Refresh" onAction="#handleRefresh" styleClass="button" />
+            <Button text="Back to Main" onAction="#goToMainView" styleClass="button" />
+            <TextField fx:id="searchField" promptText="Search by name..." onKeyReleased="#handleSearch" />
+        </HBox>
+    </top>
+
+    <!-- TableView Center -->
+    <center>
+        <TableView fx:id="feedbackTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
+                   BorderPane.alignment="CENTER" styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="colNom" text="Name" prefWidth="200" />
+                <TableColumn fx:id="colPrenom" text="Surname" prefWidth="200" />
+                <TableColumn fx:id="colFeedback" text="Feedback" prefWidth="200" />
+                <TableColumn fx:id="colRating" text="Rating" prefWidth="100" />
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>
