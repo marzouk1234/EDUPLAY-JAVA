@@ -7,20 +7,21 @@ import Models.Form_p;
 
 public class EmailSender {
 
+    // Méthode pour envoyer un email simple
     public static void sendEmail(String to, String subject, String body) {
         // Configuration pour Gmail
         String host = "smtp.gmail.com";
-        final String user = "chebbimaram0@gmail.com";
-        final String password = "hlsbbpyoruhcweaf";
-        int port = 587;
+        final String user = "chebbimaram0@gmail.com";  // Ton adresse email
+        final String password = "hlsbbpyoruhcweaf";  // Mot de passe d'application (Assure-toi que c'est un mot de passe d'application)
+        int port = 465;  // Port utilisé pour SSL (465)
 
         // Propriétés pour la connexion SMTP
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", port);
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        properties.put("mail.smtp.ssl.enable", "true");  // Utiliser SSL
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");  // Version du protocole SSL
 
         // Créer une session avec authentification
         Session session = Session.getInstance(properties, new Authenticator() {
@@ -30,7 +31,7 @@ public class EmailSender {
             }
         });
 
-        // Activer le débogage
+        // Activer le débogage pour observer les échanges avec le serveur SMTP
         session.setDebug(true);
 
         try {
@@ -60,9 +61,12 @@ public class EmailSender {
         }
     }
 
+    // Méthode pour envoyer un email avec le contenu d'un formulaire
     public static void sendFormEmail(String to, Form_p form) {
+        // Sujet de l'email
         String subject = "Formulaire: " + form.getSujet();
 
+        // Corps de l'email avec les détails du formulaire
         StringBuilder body = new StringBuilder()
                 .append("Détails du formulaire:\n\n")
                 .append("ID: ").append(form.getId()).append("\n")
@@ -71,6 +75,7 @@ public class EmailSender {
                 .append("Date: ").append(form.getFormattedDate()).append("\n\n")
                 .append("Contenu:\n").append(form.getContenu());
 
+        // Appeler la méthode d'envoi d'email
         sendEmail(to, subject, body.toString());
     }
 }
