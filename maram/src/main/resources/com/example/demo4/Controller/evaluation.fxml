@@ -41,5 +41,22 @@
       <TextField fx:id="fullnameevField" layoutX="256.0" layoutY="265.0" opacity="0.0" prefHeight="25.0" prefWidth="0.0" />
       <TextField fx:id="appreciationevField" layoutX="249.0" layoutY="478.0" opacity="0.0" prefHeight="25.0" prefWidth="0.0" />
       <Button fx:id="annulerButton" layoutX="10.0" layoutY="490.0" opacity="0.0" />
+      <ComboBox fx:id="comboEtudiant" layoutX="100.0" layoutY="200.0" prefWidth="200.0"/>
+      <VBox layoutX="14.0" layoutY="520.0" spacing="10">
+         <Button fx:id="genererCertificatButton"
+                 mnemonicParsing="false"
+                 onAction="#onGenererCertificat"
+                 prefHeight="26.0"
+                 prefWidth="290.0"
+                 style="-fx-background-radius: 30;"
+                 text="Générer Certificat"
+                 textFill="#1b74c9" />
+
+         <Label fx:id="messageLabel"
+                text="Le message apparaîtra ici."
+                visible="true"
+                style="-fx-font-size: 16px; -fx-text-fill: black;" />
+      </VBox>
+
    </children>
 </AnchorPane>

@@ -218,16 +218,21 @@
                               <Button fx:id="uploadButton" layoutX="81.0" layoutY="238.0" onAction="#uploadImage" prefHeight="25.0" prefWidth="57.0" text="upload" textFill="#57c922" />
 
                               <!-- TableView -->
-                              <TableView fx:id="evaluationTv" layoutX="178.0" layoutY="228.0" onMouseClicked="#choisirev" prefHeight="192.0" prefWidth="766.0" style="-fx-background-color: #FFE4B5;">
-                                 <columns>
-                                    <TableColumn fx:id="titreCol" prefWidth="66.0" text="Titre" />
-                                    <TableColumn fx:id="typeCol" prefWidth="303.0" text="Type" />
-                                    <TableColumn fx:id="dateCol" prefWidth="246.0" text="Date Début" />
-                                    <TableColumn fx:id="imageCol" prefWidth="150.0" text="Image" />
-                                  </columns>
-                              </TableView>
+                                        <TableView fx:id="evaluationTv" layoutX="178.0" layoutY="228.0" onMouseClicked="#choisirev" prefHeight="192.0" prefWidth="766.0" style="-fx-background-color: #FFE4B5;">
+                                            <columns>
+                                                <TableColumn fx:id="titreCol" prefWidth="66.0" text="Titre" />
+                                                <TableColumn fx:id="typeCol" prefWidth="303.0" text="Type" />
+                                                <TableColumn fx:id="dateCol" prefWidth="246.0" text="Date Début" />
+                                                <TableColumn fx:id="imageCol" prefWidth="150.0" text="Image" />
+                                            </columns>
+                                        </TableView>
 
-                              <!-- Recherche -->
+                                        <!-- Ajoute le Label et ComboBox en dehors de la TableView -->
+                                        <Label layoutX="178.0" layoutY="430.0" text="Étudiant concerné :" />
+                                        <ComboBox fx:id="comboEtudiant" layoutX="300.0" layoutY="426.0" prefWidth="200.0"/>
+
+
+                                        <!-- Recherche -->
                               <TextField fx:id="rechercher" layoutX="785.0" layoutY="172.0" onKeyPressed="#rechercherev" prefHeight="25.0" prefWidth="161.0" promptText="Chercher par titre" />
 
                               <!-- Images -->

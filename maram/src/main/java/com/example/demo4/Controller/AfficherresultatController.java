@@ -15,6 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import java.util.Optional;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -115,8 +121,11 @@ public class AfficherresultatController implements Initializable {
                 // Vous pouvez ajouter un Alert pour prévenir l'utilisateur
                 return;
             }
-            Ps.modifierresultat(s);
-            getResultats();
+            try {
+                Ps.modifierresultat(s);
+            } catch (SQLException e) {
+                throw new RuntimeException("Erreur lors de la modification du résultat", e);
+            }            getResultats();
         }
     }
 
@@ -124,11 +133,43 @@ public class AfficherresultatController implements Initializable {
     private void supprimerresultat(ActionEvent event) {
         resultat s = tableresultat.getSelectionModel().getSelectedItem();
         if (s != null) {
-            Ps.supprimerresultat(s.getId());
-            getResultats();
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation de suppression");
+            confirmationAlert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce résultat ?");
+            confirmationAlert.setContentText("Cette action est irréversible.");
+
+            URL imageUrl = getClass().getResource("/com/example/demo4/images/warning.png");
+            if (imageUrl != null) {
+                Image icon = new Image(imageUrl.toExternalForm());
+                Stage dialogStage = (Stage) confirmationAlert.getDialogPane().getScene().getWindow();
+                dialogStage.getIcons().add(icon);
+            } else {
+                System.out.println("⚠️ Image warning.png introuvable !");
+            }
+
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // ✅ Pas de try/catch ici car SQLException n’est pas levée
+                try {
+                    Ps.supprimerresultat(s.getId());
+                } catch (SQLException e) {
+                    throw new RuntimeException("Erreur lors de la suppression du résultat", e);
+                }                showAlert(Alert.AlertType.INFORMATION, "Succès", null, "Résultat supprimé avec succès.");
+                getResultats();
+            }
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Avertissement", null, "Veuillez sélectionner un résultat à supprimer.");
         }
     }
 
+
+    private void showAlert(Alert.AlertType type, String title, String header, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
 
 }

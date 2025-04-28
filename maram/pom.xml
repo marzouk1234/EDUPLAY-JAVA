@@ -152,7 +152,11 @@
       <artifactId>demo4</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20231013</version> <!-- ou la dernière version -->
+    </dependency>
   </dependencies>
 
   <build>

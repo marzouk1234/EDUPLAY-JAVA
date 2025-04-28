@@ -6,32 +6,29 @@ public class evaluation {
 
     private int id;
     private String titre;
-
     private String type;
     private LocalDateTime date;
     private String image;
-
+    private int etudiantId; // Ajout de l'attribut etudiantId
 
     public evaluation() {
     }
 
-    public evaluation(int id, String titre, String type, LocalDateTime date,
-                       String image) {
+    public evaluation(int id, String titre, String type, LocalDateTime date, String image, int etudiantId) {
         this.id = id;
         this.titre = titre;
         this.type = type;
         this.date = date;
         this.image = image;
-
+        this.etudiantId = etudiantId;
     }
 
-    public evaluation(String titre, String type, LocalDateTime date,
-                       String image) {
+    public evaluation(String titre, String type, LocalDateTime date, String image, int etudiantId) {
         this.titre = titre;
         this.type = type;
         this.date = date;
         this.image = image;
-
+        this.etudiantId = etudiantId;
     }
 
     // Getters
@@ -43,8 +40,6 @@ public class evaluation {
         return titre;
     }
 
-
-
     public String getType() {
         return type;
     }
@@ -53,15 +48,13 @@ public class evaluation {
         return date;
     }
 
-
-
     public String getImage() {
         return image;
     }
 
-
-
-
+    public int getEtudiantId() {
+        return etudiantId;
+    }
 
     // Setters
     public void setId(int id) {
@@ -72,8 +65,6 @@ public class evaluation {
         this.titre = titre;
     }
 
-
-
     public void setType(String type) {
         this.type = type;
     }
@@ -82,13 +73,13 @@ public class evaluation {
         this.date = date;
     }
 
-
-
     public void setImage(String image) {
         this.image = image;
     }
 
-
+    public void setEtudiantId(int etudiantId) {
+        this.etudiantId = etudiantId;
+    }
 
     @Override
     public String toString() {
@@ -97,8 +88,8 @@ public class evaluation {
                 ", titre='" + titre + '\'' +
                 ", type='" + type + '\'' +
                 ", date=" + date +
-
                 ", image='" + image + '\'' +
+                ", etudiantId=" + etudiantId +
                 '}';
     }
 }
