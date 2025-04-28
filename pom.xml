@@ -12,10 +12,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+<<<<<<< HEAD
         <javafx.version>20.0.2</javafx.version>
         <itext.version>7.2.5</itext.version>
         <zxing.version>3.5.1</zxing.version>
         <jakarta.mail.version>2.1.2</jakarta.mail.version>
+=======
+        <javafx.version>20.0.2</javafx.version> <!-- tu peux mettre à jour si besoin -->
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
     </properties>
 
     <dependencies>
@@ -35,6 +39,7 @@
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
@@ -63,10 +68,26 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>io</artifactId>
             <version>${itext.version}</version>
+=======
+
+        <!-- MySQL Connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version> <!-- ou autre version stable -->
+        </dependency>
+
+        <!-- iText PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>7.2.5</version>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>layout</artifactId>
+<<<<<<< HEAD
             <version>${itext.version}</version>
         </dependency>
         <dependency>
@@ -113,12 +134,16 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>styled-xml-parser</artifactId>
             <version>${itext.version}</version>
+=======
+            <version>7.2.5</version>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         </dependency>
 
         <!-- Jakarta Mail -->
         <dependency>
             <groupId>jakarta.mail</groupId>
             <artifactId>jakarta.mail-api</artifactId>
+<<<<<<< HEAD
             <version>${jakarta.mail.version}</version>
         </dependency>
         <dependency>
@@ -131,23 +156,44 @@
             <artifactId>jakarta.activation-api</artifactId>
             <version>2.1.2</version>
         </dependency>
+=======
+            <version>2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
 
         <!-- ZXing (QR Code) -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
+<<<<<<< HEAD
             <version>${zxing.version}</version>
+=======
+            <version>3.5.1</version>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
+<<<<<<< HEAD
             <version>${zxing.version}</version>
+=======
+            <version>3.5.1</version>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+<<<<<<< HEAD
             <!-- Maven Compiler Plugin -->
+=======
+            <!-- Maven Compiler -->
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -164,10 +210,15 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
+<<<<<<< HEAD
                     <mainClass>Controllers.Home</mainClass>
                     <options>
                         <option>--add-modules</option>
                         <option>javafx.controls,javafx.fxml,javafx.web,javafx.swing,javafx.media</option>
+=======
+                    <mainClass>Controllers.Home</mainClass> <!-- adapte si ton main est ailleurs -->
+                    <options>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
                         <option>--add-opens</option>
                         <option>javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED</option>
                         <option>--add-opens</option>
@@ -175,8 +226,11 @@
                         <option>--add-opens</option>
                         <option>javafx.graphics/com.sun.javafx.css=ALL-UNNAMED</option>
                         <option>--add-opens</option>
+<<<<<<< HEAD
                         <option>javafx.base/com.sun.javafx.runtime=ALL-UNNAMED</option>
                         <option>--add-opens</option>
+=======
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
                         <option>javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</option>
                         <option>--add-opens</option>
                         <option>javafx.graphics/com.sun.glass.ui=ALL-UNNAMED</option>
@@ -186,7 +240,18 @@
                         <option>javafx.web/com.sun.webkit=ALL-UNNAMED</option>
                         <option>--add-opens</option>
                         <option>javafx.controls/javafx.scene.control=ALL-UNNAMED</option>
+<<<<<<< HEAD
                     </options>
+=======
+                        <option>--add-exports</option>
+                        <option>javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED</option>
+                    </options>
+                    <modules>
+                        <module>javafx.controls</module>
+                        <module>javafx.fxml</module>
+                        <module>javafx.web</module>
+                    </modules>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
                 </configuration>
             </plugin>
 
@@ -213,4 +278,8 @@
             </plugin>
         </plugins>
     </build>
+<<<<<<< HEAD
 </project>
+=======
+</project>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78

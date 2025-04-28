@@ -6,6 +6,7 @@ import Utils.QRCodeGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+<<<<<<< HEAD
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
@@ -16,6 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+=======
+import javafx.collections.transformation.SortedList;
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +33,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+<<<<<<< HEAD
+=======
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -41,6 +50,7 @@ import Services.Form_pService;
 
 public class AfficherForm_pController implements Initializable {
 
+<<<<<<< HEAD
     @FXML private AnchorPane rootPane;
     @FXML private TableView<Form_p> formTable;
     @FXML private TableColumn<Form_p, Integer> idColumn;
@@ -59,11 +69,64 @@ public class AfficherForm_pController implements Initializable {
     @FXML private Button pdfButton;
     @FXML private Button mailButton;
     @FXML private Button qrButton;
+=======
+    @FXML
+    private TableView<Form_p> formTable;
+
+    @FXML
+    private TableColumn<Form_p, Integer> idColumn;
+
+    @FXML
+    private TableColumn<Form_p, String> sujetColumn;
+
+    @FXML
+    private TableColumn<Form_p, String> contenuColumn;
+
+    @FXML
+    private TableColumn<Form_p, String> dateColumn;
+
+    @FXML
+    private TableColumn<Form_p, String> auteurColumn;
+
+    @FXML
+    private Button ajouterButton;
+
+    @FXML
+    private Button modifierButton;
+
+    @FXML
+    private Button supprimerButton;
+    
+    @FXML
+    private Button refreshButton;
+    
+    @FXML
+    private TextField searchField;
+    
+    @FXML
+    private Label statusLabel;
+    
+    @FXML
+    private Label countLabel;
+
+    @FXML
+    private AnchorPane rootPane;
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
+
+    @FXML
+    private DatePicker dateFilter;
 
     private Form_pService formService;
+<<<<<<< HEAD
     private ObservableList<Form_p> formData = FXCollections.observableArrayList();
     private FilteredList<Form_p> filteredData;
     private ScheduledExecutorService autoRefreshExecutor;
+=======
+    private ObservableList<Form_p> formList;
+    private FilteredList<Form_p> filteredData;
+    private SortedList<Form_p> sortedData;
+    private ScheduledExecutorService scheduler;
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,7 +146,11 @@ public class AfficherForm_pController implements Initializable {
             });
             auteurColumn.setCellValueFactory(new PropertyValueFactory<>("auteur"));
 
+<<<<<<< HEAD
             // Tooltip contenu
+=======
+            // Configurer le tooltip pour le contenu
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
             contenuColumn.setCellFactory(tc -> {
                 TableCell<Form_p, String> cell = new TableCell<>();
                 Tooltip tooltip = new Tooltip();
@@ -97,9 +164,17 @@ public class AfficherForm_pController implements Initializable {
                 return cell;
             });
 
+<<<<<<< HEAD
             // Initialiser la liste filtrée
             filteredData = new FilteredList<>(formData, p -> true);
             formTable.setItems(filteredData);
+=======
+            // Load data
+            loadFormData();
+            
+            // Configurer la recherche
+            setupSearchAndSort();
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
 
             loadFormData();
             setupSearchAndSort();
@@ -114,6 +189,7 @@ public class AfficherForm_pController implements Initializable {
 
             modifierButton.setDisable(true);
             supprimerButton.setDisable(true);
+<<<<<<< HEAD
             pdfButton.setDisable(true);
             mailButton.setDisable(true);
             qrButton.setDisable(true);
@@ -124,18 +200,189 @@ public class AfficherForm_pController implements Initializable {
             statusLabel.setText("Interface initialisée avec succès");
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur d'initialisation", "Impossible d'initialiser l'écran: " + e.getMessage());
+=======
+            
+            // Configurer le rafraîchissement automatique toutes les 5 secondes
+            startAutoRefresh();
+            
+            // Configuration du filtre par date
+            setupDateFilter();
+            
+            statusLabel.setText("Interface initialisée avec succès");
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur d'initialisation", 
+                    "Impossible d'initialiser l'écran: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void setupSearchAndSort() {
+        // Configurer le filtre
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> applyFilter());
+        dateFilter.valueProperty().addListener((observable, oldValue, newValue) -> applyFilter());
+    }
+    
+    private void applyFilter() {
+        if (filteredData == null) return;
+        
+        String searchText = searchField.getText().toLowerCase();
+        LocalDate selectedDate = dateFilter.getValue();
+
+        filteredData.setPredicate(form -> {
+            if (form == null) return false;
+
+            boolean matchesSearch = searchText == null || searchText.isEmpty() ||
+                    form.getSujet().toLowerCase().contains(searchText) ||
+                    form.getContenu().toLowerCase().contains(searchText) ||
+                    form.getAuteur().toLowerCase().contains(searchText);
+
+            boolean matchesDate = selectedDate == null ||
+                    form.getDatePub().equals(selectedDate);
+
+            return matchesSearch && matchesDate;
+        });
+        
+        updateCountLabel();
+    }
+    
+    private void updateCountLabel() {
+        if (filteredData == null) {
+            filteredData = new FilteredList<>(formList, p -> true);
+        }
+        int totalCount = formList.size();
+        int filteredCount = filteredData.size();
+        
+        if (totalCount == filteredCount) {
+            countLabel.setText(totalCount + " formulaire(s) au total");
+        } else {
+            countLabel.setText(filteredCount + " formulaire(s) sur " + totalCount + " au total");
+        }
+    }
+    
+    private void startAutoRefresh() {
+        // Arrêter le scheduler existant s'il existe
+        stopAutoRefresh();
+        
+        // Créer un nouveau scheduler
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        
+        // Programmer le rafraîchissement périodique
+        scheduler.scheduleAtFixedRate(() -> {
+            // Exécution sur le thread JavaFX
+            Platform.runLater(this::loadFormData);
+        }, 5, 5, TimeUnit.SECONDS);
+    }
+    
+    private void stopAutoRefresh() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+            try {
+                // Attendre la fin des tâches en cours
+                if (!scheduler.awaitTermination(2, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+        }
+    }
+
+    private void loadFormData() {
+        try {
+            // Sauvegarder l'élément sélectionné pour le restaurer après
+            Form_p selectedForm = formTable.getSelectionModel().getSelectedItem();
+            Integer selectedId = selectedForm != null ? selectedForm.getId() : null;
+            
+            // Get all forms from the database
+            List<Form_p> forms = formService.getAll();
+            
+            // Convert to observable list
+            formList = FXCollections.observableArrayList(forms);
+            
+            // Configurer le FilteredList si c'est la première fois
+            if (filteredData == null) {
+                filteredData = new FilteredList<>(formList, p -> true);
+                // Créer et configurer le SortedList
+                sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(formTable.comparatorProperty());
+                formTable.setItems(sortedData);
+            }
+            
+            // Appliquer le filtre actuel
+            applyFilter();
+            
+            // Restaurer la sélection si possible
+            if (selectedId != null) {
+                formList.stream()
+                    .filter(form -> form.getId() == selectedId)
+                    .findFirst()
+                    .ifPresent(form -> {
+                        formTable.getSelectionModel().select(form);
+                        formTable.scrollTo(form);
+                    });
+            }
+            
+            // Mettre à jour le compteur
+            updateCountLabel();
+            
+            // Informer si aucun formulaire n'est trouvé
+            if (forms.isEmpty()) {
+                Platform.runLater(() -> {
+                    showAlert(Alert.AlertType.INFORMATION, "Aucune donnée", 
+                            "Aucun formulaire trouvé dans la base de données.");
+                });
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de chargement", 
+                    "Impossible de charger les données: " + e.getMessage());
+            // Initialiser une liste vide en cas d'erreur
+            formList = FXCollections.observableArrayList(Collections.emptyList());
+            formTable.setItems(formList);
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
             e.printStackTrace();
         }
     }
 
     // Bouton pour exporter en PDF
     @FXML
+<<<<<<< HEAD
     public void handleExportPdf(ActionEvent event) {
+=======
+    public void handleAjouter(ActionEvent event) {
+        try {
+            // Load the add form UI
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterForm_p.fxml"));
+            Parent root = loader.load();
+            
+            // Create a new stage for the add form
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Ajouter un formulaire");
+            stage.setScene(new Scene(root));
+            
+            // Show the stage and wait for it to close
+            stage.showAndWait();
+            
+            // Refresh the data after the form is closed
+            loadFormData();
+            
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", 
+                    "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleModifier(ActionEvent event) {
+        // Get the selected form
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         Form_p selectedForm = formTable.getSelectionModel().getSelectedItem();
         if (selectedForm == null) {
             showAlert(Alert.AlertType.WARNING, "Aucune sélection", "Veuillez sélectionner un formulaire à exporter.");
             return;
         }
+<<<<<<< HEAD
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le formulaire en PDF");
@@ -148,11 +395,81 @@ public class AfficherForm_pController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Formulaire exporté en PDF avec succès.");
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'exportation PDF: " + e.getMessage());
+=======
+        
+        try {
+            // Load the modify form UI
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierForm_p.fxml"));
+            Parent root = loader.load();
+            
+            // Get the controller and set the form to modify
+            ModifierForm_pController controller = loader.getController();
+            controller.setFormData(selectedForm);
+            
+            // Create a new stage for the modify form
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modifier un formulaire");
+            stage.setScene(new Scene(root));
+            
+            // Show the stage and wait for it to close
+            stage.showAndWait();
+            
+            // Refresh the data after the form is closed
+            loadFormData();
+            
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", 
+                    "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleSupprimer(ActionEvent event) {
+        // Get the selected form
+        Form_p selectedForm = formTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedForm == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection", 
+                    "Veuillez sélectionner un formulaire à supprimer.");
+            return;
+        }
+        
+        // Confirm deletion
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer ce formulaire ?");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Delete the form
+                formService.delete(selectedForm);
+                
+                // Refresh the data
+                loadFormData();
+                
+                showAlert(Alert.AlertType.INFORMATION, "Succès", 
+                        "Le formulaire a été supprimé avec succès.");
+                
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                        "Impossible de supprimer le formulaire: " + e.getMessage());
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
                 e.printStackTrace();
             }
         }
     }
+    
+    @FXML
+    public void handleRefresh(ActionEvent event) {
+        loadFormData();
+    }
 
+<<<<<<< HEAD
     // Bouton pour envoyer par mail
     @FXML
     public void handleSendMail(ActionEvent event) {
@@ -221,6 +538,24 @@ public class AfficherForm_pController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la génération du QR code: " + e.getMessage());
             e.printStackTrace();
         }
+=======
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public void cleanup() {
+        stopAutoRefresh();
+    }
+
+    private void setupDateFilter() {
+        dateFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilter();
+        });
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
     }
 
     // Méthode pour charger les données dans le tableau

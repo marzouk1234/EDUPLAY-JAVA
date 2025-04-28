@@ -6,6 +6,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.shape.Rectangle?>
 
+<<<<<<< HEAD
 <AnchorPane fx:id="rootPane" prefHeight="650.0" prefWidth="950.0" styleClass="root"
             stylesheets="/style.css"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
@@ -48,11 +49,51 @@
                 <TableColumn fx:id="contenuColumn" prefWidth="300" text="Contenu"/>
                 <TableColumn fx:id="dateColumn" prefWidth="120" text="Date de Publication"/>
                 <TableColumn fx:id="auteurColumn" prefWidth="150" text="Auteur"/>
+=======
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" 
+            xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="Controllers.AfficherForm_pController">
+
+    <VBox spacing="15" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <padding>
+            <Insets top="10" right="20" bottom="15" left="20"/>
+        </padding>
+        
+        <!-- Entête avec titre et décoration -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Rectangle width="8" height="32" fill="#3498db" arcWidth="4" arcHeight="4"/>
+            <Label styleClass="title-label" text="Liste des Formulaires" />
+        </HBox>
+        
+        <!-- Description -->
+        <Text styleClass="description-text" text="Consultez et gérez tous les formulaires disponibles dans le système." />
+
+        <!-- Barre de recherche et filtres -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="10" left="5"/>
+            </padding>
+            <TextField fx:id="searchField" promptText="Rechercher un formulaire..." prefWidth="300" styleClass="search-field"/>
+            <DatePicker fx:id="dateFilter" promptText="Filtrer par date" styleClass="date-picker"/>
+            <HBox HBox.hgrow="ALWAYS" />
+            <Label fx:id="statusLabel" styleClass="status-label"/>
+        </HBox>
+
+        <!-- Tableau avec ombres et bordures arrondies -->
+        <TableView fx:id="formTable" VBox.vgrow="ALWAYS" styleClass="animated-table">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="0.0" text="N°" visible="false" />
+                <TableColumn fx:id="sujetColumn" prefWidth="200" text="Sujet" />
+                <TableColumn fx:id="contenuColumn" prefWidth="300" text="Contenu" />
+                <TableColumn fx:id="dateColumn" prefWidth="120" text="Date de Publication" />
+                <TableColumn fx:id="auteurColumn" prefWidth="150" text="Auteur" />
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
             <placeholder>
+<<<<<<< HEAD
                 <Label text="Aucun formulaire disponible."/>
             </placeholder>
         </TableView>
@@ -80,6 +121,29 @@
                     styleClass="button-secondary, animated-button"/>
             <Button fx:id="qrButton" text="Afficher QR" onAction="#handleShowQr"
                     styleClass="button-secondary, animated-button"/>
+=======
+                <Label text="Aucun formulaire disponible" />
+            </placeholder>
+        </TableView>
+
+        <!-- Barre de boutons avec effets d'animation -->
+        <HBox spacing="20" alignment="CENTER" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="0" bottom="10" left="0"/>
+            </padding>
+            <Button fx:id="ajouterButton" onAction="#handleAjouter" styleClass="button-primary, animated-button" text="Ajouter" />
+            <Button fx:id="modifierButton" onAction="#handleModifier" styleClass="button-info, animated-button" text="Modifier" />
+            <Button fx:id="supprimerButton" onAction="#handleSupprimer" styleClass="button-danger, animated-button" text="Supprimer" />
+            <Button fx:id="refreshButton" onAction="#handleRefresh" styleClass="button, animated-button" text="Actualiser" />
+        </HBox>
+        
+        <!-- Barre de status en bas -->
+        <HBox alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="5" left="5"/>
+            </padding>
+            <Label fx:id="countLabel" styleClass="count-label"/>
+>>>>>>> 84436b55f0f56204e6f48c9d38756d282329aa78
         </HBox>
 
         <!-- Barre de statut -->
