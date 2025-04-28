@@ -25,6 +25,8 @@
                </font>
             </TextField>
 
+
+
             <Button fx:id="log" layoutX="161.0" layoutY="475.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="113.0" style="-fx-background-color: black;" text="Login" textFill="#f2f2f2">
                <font>
                   <Font size="18.0" />
@@ -45,6 +47,8 @@
                   <Font size="18.0" />
                </font>
             </Button>
+            <Button fx:id="forgotPasswordBtn" onAction="#handleForgotPassword" text="Mot de passe oublié ?" />
+
          </children>
       </Pane>
       <ImageView fitHeight="80.0" fitWidth="265.0" layoutY="237.0">

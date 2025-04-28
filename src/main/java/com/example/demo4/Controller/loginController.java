@@ -18,6 +18,17 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+//import com.example.demo4.auth.GoogleSignInHelper;
+//import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.*;
 
 public class loginController implements Initializable {
 	private ServiceUser serviceUser;
@@ -27,7 +38,6 @@ public class loginController implements Initializable {
 
 	@FXML
 	private PasswordField passwordField;
-
 
 
 	@Override
@@ -150,6 +160,108 @@ public class loginController implements Initializable {
 			ex.printStackTrace();
 		}
 	}
+
+	@FXML
+	void handleForgotPassword(ActionEvent event) {
+		String email = login.getText();
+
+		if (email.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Attention");
+			alert.setHeaderText(null);
+			alert.setContentText("Veuillez entrer votre email pour réinitialiser le mot de passe.");
+			alert.showAndWait();
+			return;
+		}
+
+		// Vérifie si l'utilisateur existe
+		User user = serviceUser.findUserByUsername(email);
+		if (user == null) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Utilisateur introuvable");
+			alert.setHeaderText(null);
+			alert.setContentText("Aucun utilisateur avec cet email.");
+			alert.showAndWait();
+			return;
+		}
+
+		// Générer un nouveau mot de passe
+		String newPassword = generateRandomPassword(10);
+		String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+		// Mettre à jour le mot de passe dans la base de données
+		serviceUser.updatePassword(email, hashedPassword);
+
+
+
+		// Envoyer l'email
+		boolean success = MailSender.sendMail(email, "Nouveau mot de passe", "Votre nouveau mot de passe est : " + newPassword);
+
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Mot de passe réinitialisé");
+		alert.setHeaderText(null);
+		alert.setContentText(success ?
+				"Un nouveau mot de passe a été envoyé à votre adresse email." :
+				"Erreur lors de l'envoi du mail.");
+		alert.showAndWait();
+	}
+	private String generateRandomPassword(int length) {
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			int index = (int) (Math.random() * chars.length());
+			sb.append(chars.charAt(index));
+		}
+		return sb.toString();
+
+
+	}
+	/*
+	private void handleGoogleSignIn() {
+		try {
+			// Simuler un navigateur qui ouvre une page Google Sign In (via OAuth Playground par exemple)
+			String loginURL = "https://accounts.google.com/o/oauth2/v2/auth?"
+					+ "client_id=TA_CLIENT_ID"
+					+ "&redirect_uri=http://localhost:8080"
+					+ "&response_type=token"
+					+ "&scope=email%20profile";
+
+			Desktop.getDesktop().browse(new URI(loginURL));
+
+			// Ici il te faudrait une vraie solution pour capter le token depuis le navigateur ou une API Java intermédiaire
+			// Pour les tests, supposons que tu reçois le token manuellement
+			String idToken = "COPIE_LE_JETON_QUE_TU_REÇOIS"; // à remplacer par vrai token
+
+			GoogleIdToken.Payload payload = GoogleSignInHelper.verifyToken(idToken);
+
+			if (payload != null) {
+				String email = payload.getEmail();
+				String name = (String) payload.get("name");
+
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("Connexion réussie !");
+				alert.setHeaderText(null);
+				alert.setContentText("Bienvenue " + name + " (" + email + ")");
+				alert.showAndWait();
+			} else {
+				showError("Jeton invalide !");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			showError("Erreur lors de la connexion Google");
+		}
+	}
+
+	private void showError(String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Erreur");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}*/
+
+
 
 
 

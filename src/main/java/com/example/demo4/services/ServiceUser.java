@@ -236,12 +236,11 @@ public class ServiceUser {
 
 
     }
-    private Connection cnx;
+
     public boolean emailExiste(String email) {
         try {
-            cnx = MyDB.getInstance().getConnection();
             String query = "SELECT COUNT(*) FROM user WHERE email = ?";
-            PreparedStatement ps = cnx.prepareStatement(query);
+            PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -251,6 +250,19 @@ public class ServiceUser {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public void updatePassword(String email, String hashedPassword) {
+        try {
+            String req = "UPDATE user SET password=? WHERE email=?";
+            PreparedStatement ps = connection.prepareStatement(req);
+            ps.setString(1, hashedPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

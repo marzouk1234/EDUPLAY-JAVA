@@ -81,6 +81,15 @@ public class RegistreUserController implements Initializable {
 		LocalDate dateNaissance = dateNaissancePicker.getValue();
 		String selectedRole = roleCombo.getValue();
 
+
+// Vérification de l'âge
+		int age = LocalDate.now().getYear() - dateNaissance.getYear();
+		if (age < 13 || age > 60) {
+			showAlert("Âge invalide", "L'âge doit être compris entre 13 et 60 ans.");
+			return;
+		}
+
+
 		if (prenom.isEmpty() || nom.isEmpty() || email.isEmpty() || num_t.isEmpty() ||
 				pass.isEmpty() || pass2.isEmpty() || urlTF.getText().isEmpty() ||
 				dateNaissance == null || selectedRole == null || file == null) {
