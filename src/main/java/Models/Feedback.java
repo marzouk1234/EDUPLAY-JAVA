@@ -1,5 +1,7 @@
 package Models;
 
+import javafx.scene.image.ImageView; // import for ImageView
+
 public class Feedback {
     private int id;
     private int id_jeux;
@@ -8,6 +10,8 @@ public class Feedback {
     private String feedback;
     private int rating;
 
+    private ImageView qrCode; // 🆕 Add QR code image view
+
     public Feedback(int id, int id_jeux, String nom, String prenom, String feedback, int rating) {
         this.id = id;
         this.id_jeux = id_jeux;
@@ -15,6 +19,17 @@ public class Feedback {
         this.prenom = prenom;
         this.feedback = feedback;
         this.rating = rating;
+    }
+
+    // 🆕 New constructor (with QR code)
+    public Feedback(int id, int id_jeux, String nom, String prenom, String feedback, int rating, ImageView qrCode) {
+        this.id = id;
+        this.id_jeux = id_jeux;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.feedback = feedback;
+        this.rating = rating;
+        this.qrCode = qrCode;
     }
 
     // Getters and setters
@@ -36,10 +51,15 @@ public class Feedback {
     public Integer getRating() { return rating; }
     public void setRating(Integer rating) { this.rating = rating; }
 
-    public void setid_jeux(int i) {
+    public void setid_jeux(int i) { this.id_jeux = i; }
+    public int getid_jeux() { return id_jeux; }
+
+    // 🆕 QR code getter/setter
+    public ImageView getQrCode() {
+        return qrCode;
     }
 
-    public int getid_jeux() {
-        return id_jeux;
+    public void setQrCode(ImageView qrCode) {
+        this.qrCode = qrCode;
     }
 }

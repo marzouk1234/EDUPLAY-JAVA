@@ -1,193 +1,266 @@
 package Controllers;
 
-import Models.Feedback;
+import Models.Game;
+import Services.GameService1;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import Models.Game;
-import Services.GameService1;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class GameView {
-
-    @FXML private TableView<Game> gameTable;
-    @FXML private TableColumn<Game, Integer> colId;
-    @FXML private TableColumn<Game, String> colNom;
-    @FXML private TableColumn<Game, String> colPrenom;
-    @FXML private TableColumn<Game, String> colType;
-    @FXML private TableColumn<Game, Date> colDate;
 
     @FXML private TextField tfId;
     @FXML private TextField tfNom;
     @FXML private TextField tfPrenom;
     @FXML private ComboBox<String> cbType;
     @FXML private DatePicker tfDate;
+    @FXML private TextField searchField;
+    @FXML private TableColumn<Game, Void> colAction;
+    @FXML private ComboBox<String> fieldComboBox;
 
-    @FXML private Button btnAdd;
-    @FXML private Button btnUpdate;
-    @FXML private Button btnDelete;
-    @FXML private Button btnRefresh;
+    @FXML private TableView<Game> gameTable;
+    @FXML private TableColumn<Game, Integer> colId;
+    @FXML private TableColumn<Game, String> colNom;
+    @FXML private TableColumn<Game, String> colPrenom;
+    @FXML private TableColumn<Game, String> colType;
+    @FXML private TableColumn<Game, java.sql.Date> colDate;
 
     private GameService1 gameService;
+    private FilteredList<Game> filteredList;
+    private ObservableList<Game> fullList;
 
-    public GameView() {
-        // No-arg constructor required by FXMLLoader
+    private int currentPage = 1;
+    private int pageSize = 8;
+
+    @FXML
+    public void initialize() throws SQLException {
+        gameService = new GameService1();
+        addButtonToTable();
+        fullList = FXCollections.observableArrayList(gameService.afficher());
+
+        filteredList = new FilteredList<>(fullList, p -> true);
+
+        gameTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        fieldComboBox.setItems(FXCollections.observableArrayList("Nom", "Prenom", "Type"));
+        fieldComboBox.getSelectionModel().selectFirst();
+    }
+
+    private ObservableList<Game> getCurrentPageItems() {
+        int fromIndex = (currentPage - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, filteredList.size());
+        return FXCollections.observableArrayList(filteredList.subList(fromIndex, toIndex));
     }
 
     @FXML
-    public void initialize() {
-        try {
-            gameService = new GameService1();
-            loadTable();
-
-            //cbType.setItems(FXCollections.observableArrayList("puzzle", "snake", "chess"));
-        } catch (SQLException e) {
-            showError("Erreur de connexion", e.getMessage());
+    void handleNextPage(ActionEvent event) {
+        if ((currentPage * pageSize) < filteredList.size()) {
+            currentPage++;
+            gameTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
         }
+    }
+
+    @FXML
+    void handlePreviousPage(ActionEvent event) {
+        if (currentPage > 1) {
+            currentPage--;
+            gameTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+        }
+    }
+
+    @FXML
+    void handleSearch() {
+        String selectedField = fieldComboBox.getValue();
+        String searchText = searchField.getText().toLowerCase().trim();
+
+        filteredList.setPredicate(game -> {
+            if (searchText.isEmpty()) {
+                return true;
+            }
+
+            switch (selectedField) {
+                case "Nom":
+                    return game.getNom() != null && game.getNom().toLowerCase().contains(searchText);
+                case "Prenom":
+                    return game.getPrenom() != null && game.getPrenom().toLowerCase().contains(searchText);
+                case "Type":
+                    return game.getType() != null && game.getType().toLowerCase().contains(searchText);
+                default:
+                    return true;
+            }
+        });
+
+        currentPage = 1;
+        gameTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+    }
+
+    @FXML
+    void handleDelete() {
+        try {
+            Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
+            if (selectedGame == null) {
+                showError("Delete Error", "Please select a game to delete.");
+                return;
+            }
+
+            gameService.supprimer(selectedGame.getId());
+
+            showInfo("Game deleted successfully!");
+            loadTable();
+        } catch (Exception e) {
+            showError("Delete Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    void handleRefresh() {
+        loadTable();
     }
 
     private void loadTable() {
         try {
-            ObservableList<Game> list = FXCollections.observableArrayList(gameService.afficher());
-            gameTable.setItems(list);
-            colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
-            colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
-            colType.setCellValueFactory(new PropertyValueFactory<>("type"));
-            colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+            fullList = FXCollections.observableArrayList(gameService.afficher());
+            filteredList = new FilteredList<>(fullList, p -> true);
+            currentPage = 1;
+            gameTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
         } catch (SQLException e) {
-            showError("Erreur lors du chargement", e.getMessage());
+            showError("Load Error", e.getMessage());
         }
     }
 
-    private void clearForm() {
-        tfId.clear();
-        tfNom.clear();
-        tfPrenom.clear();
-        cbType.setValue(null);
-        tfDate.setValue(null);
-    }
-
-    @FXML
-    void handleAdd(ActionEvent event) {
+    // Create export method per game
+    private void exportGameToPDF(Game game) {
+        Document document = new Document();
         try {
-            if (tfId.getText().isEmpty() ||
-                    tfNom.getText().isEmpty() ||
-                    tfPrenom.getText().isEmpty() ||
-                    cbType.getValue() == null ||
-                    tfDate.getValue() == null) {
-                showError("Champs obligatoires", "Tous les champs doivent être remplis.");
-                return;
-            }
+            String fileName = "Game_" + game.getId() + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
-            int id = Integer.parseInt(tfId.getText());
+            document.open();
+            document.add(new Paragraph("Détails du Jeu"));
+            document.add(new Paragraph(" "));
 
-            if (id <= 0) {
-                showError("ID invalide", "L'ID doit être un nombre positif.");
-                return;
-            }
+            PdfPTable table = new PdfPTable(2);
 
-            Game game = new Game(
-                    id,
-                    tfNom.getText().trim(),
-                    tfPrenom.getText().trim(),
-                    cbType.getValue(),
-                    Date.valueOf(tfDate.getValue())
-            );
+            table.addCell("ID");
+            table.addCell(String.valueOf(game.getId()));
 
-            gameService.ajouter(game);
-            showInfo("Ajout réussi !");
-            clearForm();
-            loadTable();
+            table.addCell("Nom");
+            table.addCell(game.getNom());
 
-        } catch (NumberFormatException e) {
-            showError("ID invalide", "L'ID doit être un nombre entier.");
+            table.addCell("Prénom");
+            table.addCell(game.getPrenom());
+
+            table.addCell("Type");
+            table.addCell(game.getType());
+
+            table.addCell("Date");
+            table.addCell(game.getDate().toString());
+
+            document.add(table);
+            document.close();
+
+            showInfo("PDF généré pour : " + game.getNom());
+
         } catch (Exception e) {
-            showError("Erreur d'ajout", e.getMessage());
+            showError("Erreur PDF", e.getMessage());
             e.printStackTrace();
         }
     }
 
-    @FXML
-    void handleUpdate(ActionEvent event) {
-        try {
-            Game game = new Game(
-                    Integer.parseInt(tfId.getText()),
-                    tfNom.getText(),
-                    tfPrenom.getText(),
-                    cbType.getValue(),
-                    Date.valueOf(tfDate.getValue())
-            );
-            gameService.modifier(game);
-            showInfo("Modification réussie !");
-            loadTable();
-        } catch (Exception e) {
-            showError("Erreur de modification", e.getMessage());
-        }
-    }
+    private void addButtonToTable() {
+        Callback<TableColumn<Game, Void>, TableCell<Game, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Game, Void> call(final TableColumn<Game, Void> param) {
+                final TableCell<Game, Void> cell = new TableCell<>() {
 
-    @FXML
-    void handleDelete(ActionEvent event) {
-        try {
-            int id = Integer.parseInt(tfId.getText());
-            gameService.supprimer(id);
-            showInfo("Suppression réussie !");
-            loadTable();
-        } catch (Exception e) {
-            showError("Erreur de suppression", e.getMessage());
-        }
-    }
+                    private final Button btn = new Button("Export PDF");
 
-    @FXML
-    void handleRefresh(ActionEvent event) {
-        loadTable();
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Game game = getTableView().getItems().get(getIndex());
+                            exportGameToPDF(game);
+                        });
+                        btn.getStyleClass().add("action-button"); // Optional style
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colAction.setCellFactory(cellFactory);
     }
 
     private void showInfo(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
+        alert.setTitle("Info");
         alert.setContentText(msg);
         alert.show();
     }
 
     private void showError(String header, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
+        alert.setTitle("Error");
         alert.setHeaderText(header);
         alert.setContentText(msg);
         alert.show();
     }
+
     @FXML
-    void openAjouterGame() {
+    void openAjouterGame(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterGame.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter Game");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            showError("Error", "Failed to load Add game window: " + e.getMessage());
+            Parent gameView = FXMLLoader.load(getClass().getResource("/AjouterGame.fxml"));
+            Scene gameScene = new Scene(gameView);
+
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.setScene(gameScene);
+            window.setTitle("Ajouter Jeu");
+            window.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     void openUpdateGame() {
         Game selectedGame = gameTable.getSelectionModel().getSelectedItem();
         if (selectedGame == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucune sélection");
+            alert.setTitle("No Selection");
             alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner un jeu à modifier.");
+            alert.setContentText("Please select a game to edit.");
             alert.showAndWait();
             return;
         }
@@ -196,12 +269,11 @@ public class GameView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateGame.fxml"));
             Parent root = loader.load();
 
-            // Passer le jeu sélectionné au contrôleur UpdateGame
             UpdateGame controller = loader.getController();
             controller.setGameToEdit(selectedGame);
 
             Stage stage = new Stage();
-            stage.setTitle("Modifier un jeu");
+            stage.setTitle("Update Game");
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -209,6 +281,7 @@ public class GameView {
             e.printStackTrace();
         }
     }
+
     @FXML
     void goToMainView() {
         try {
@@ -223,5 +296,4 @@ public class GameView {
             e.printStackTrace();
         }
     }
-
 }

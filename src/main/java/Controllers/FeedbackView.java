@@ -6,19 +6,20 @@ import Services.FeedbackService1;
 import Services.GameService1;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.collections.transformation.FilteredList;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-
-import static sun.net.www.MimeTable.loadTable;
 
 public class FeedbackView {
 
@@ -29,7 +30,9 @@ public class FeedbackView {
     @FXML private TextField tfFeedback;
     @FXML private TextField tfRating;
     @FXML private TextField searchField;
+    @FXML private ComboBox<String> fieldComboBox;
 
+    @FXML private TableColumn<Feedback, Void> colViewQR;
     @FXML private TableView<Feedback> feedbackTable;
     @FXML private TableColumn<Feedback, Integer> colId;
     @FXML private TableColumn<Feedback, Integer> colIdJeux;
@@ -40,99 +43,77 @@ public class FeedbackView {
 
     private FeedbackService1 feedbackService;
     private FilteredList<Feedback> filteredList;
+    private ObservableList<Feedback> fullList;
+
+    private int currentPage = 1;
+    private int pageSize = 10; // 10 feedbacks per page
 
     @FXML
     public void initialize() throws SQLException {
         feedbackService = new FeedbackService1();
-        ObservableList<Feedback> list = FXCollections.observableArrayList(feedbackService.afficher());
+        fullList = FXCollections.observableArrayList(feedbackService.afficher());
 
-        // Create a filtered list
-        filteredList = new FilteredList<>(list, p -> true);
+        filteredList = new FilteredList<>(fullList, p -> true);
 
-        feedbackTable.setItems(filteredList);
 
-        // Setting up the table columns
+        feedbackTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         colFeedback.setCellValueFactory(new PropertyValueFactory<>("feedback"));
         colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        fieldComboBox.setItems(FXCollections.observableArrayList("Nom", "Prenom", "Rating"));
+        fieldComboBox.getSelectionModel().selectFirst();
+        addViewQRButtonToTable();
+    }
+
+    private ObservableList<Feedback> getCurrentPageItems() {
+        int fromIndex = (currentPage - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, filteredList.size());
+        return FXCollections.observableArrayList(filteredList.subList(fromIndex, toIndex));
+    }
+
+    @FXML
+    void handleNextPage(ActionEvent event) {
+        if ((currentPage * pageSize) < filteredList.size()) {
+            currentPage++;
+            feedbackTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+        }
+    }
+
+    @FXML
+    void handlePreviousPage(ActionEvent event) {
+        if (currentPage > 1) {
+            currentPage--;
+            feedbackTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+        }
     }
 
     @FXML
     void handleSearch() {
-        String searchText = searchField.getText().toLowerCase();
+        String selectedField = fieldComboBox.getValue();
+        String searchText = searchField.getText().toLowerCase().trim();
 
         filteredList.setPredicate(feedback -> {
-            if (searchText == null || searchText.isEmpty()) {
-                return true; // No filtering
+            if (searchText.isEmpty()) {
+                return true;
             }
 
-            // Filter by 'nom' field (case-insensitive)
-            return feedback.getNom().toLowerCase().contains(searchText);
+            switch (selectedField) {
+                case "Nom":
+                    return feedback.getNom() != null && feedback.getNom().toLowerCase().contains(searchText);
+                case "Prenom":
+                    return feedback.getPrenom() != null && feedback.getPrenom().toLowerCase().contains(searchText);
+                case "Rating":
+                    String rating = feedback.getRating() != null ? feedback.getRating().toString().toLowerCase() : "";
+                    return rating.contains(searchText);
+                default:
+                    return true;
+            }
         });
-    }
 
-    @FXML
-    void handleAdd() {
-        try {
-            String idJeuxText = tfIdJeux.getText();
-            if (idJeuxText == null || idJeuxText.isEmpty()) {
-                showError("Validation Error", "Please enter a game ID.");
-                return;
-            }
-
-            int idJeux = Integer.parseInt(idJeuxText);
-
-            // Check if the game with the entered id_jeux exists
-            Game game = new GameService1().getGameById(idJeux);
-            if (game == null) {
-                showError("Validation Error", "The entered game ID does not exist.");
-                return;
-            }
-
-            // Create the Feedback object with the entered game ID (id_jeux)
-            Feedback fb = new Feedback(
-                    Integer.parseInt(tfId.getText()),  // Assuming tfId is the ID for feedback
-                    Integer.parseInt(tfIdJeux.getText()),  // Use entered ID here
-                    tfNom.getText(),
-                    tfPrenom.getText(),
-                    tfFeedback.getText(),
-                    Integer.parseInt(tfRating.getText())
-            );
-
-            // Call the service to add feedback to the database
-            feedbackService.ajouter(fb);
-
-            showInfo("Feedback added successfully!");
-            loadTable();  // Refresh the table
-        } catch (Exception e) {
-            showError("Add Error", e.getMessage());
-        }
-    }
-
-    @FXML
-    void handleUpdate() {
-        try {
-            Feedback selectedFeedback = feedbackTable.getSelectionModel().getSelectedItem();
-            if (selectedFeedback == null) {
-                showError("Update Error", "Please select a feedback to update.");
-                return;
-            }
-
-            // Get values from the text fields to update the selected feedback
-            selectedFeedback.setNom(tfNom.getText());
-            selectedFeedback.setPrenom(tfPrenom.getText());
-            selectedFeedback.setFeedback(tfFeedback.getText());
-            selectedFeedback.setRating(Integer.parseInt(tfRating.getText()));
-
-            // Update the feedback in the database
-            feedbackService.modifier(selectedFeedback);
-
-            showInfo("Feedback updated successfully!");
-            loadTable();  // Refresh the table
-        } catch (Exception e) {
-            showError("Update Error", e.getMessage());
-        }
+        currentPage = 1; // Reset to first page after search
+        feedbackTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
     }
 
     @FXML
@@ -144,11 +125,10 @@ public class FeedbackView {
                 return;
             }
 
-            // Delete the selected feedback from the database
             feedbackService.supprimer(selectedFeedback.getId());
 
             showInfo("Feedback deleted successfully!");
-            loadTable();  // Refresh the table
+            loadTable();
         } catch (Exception e) {
             showError("Delete Error", e.getMessage());
         }
@@ -157,6 +137,17 @@ public class FeedbackView {
     @FXML
     void handleRefresh() {
         loadTable();
+    }
+
+    private void loadTable() {
+        try {
+            fullList = FXCollections.observableArrayList(feedbackService.afficher());
+            filteredList = new FilteredList<>(fullList, p -> true);
+            currentPage = 1;
+            feedbackTable.setItems(FXCollections.observableArrayList(getCurrentPageItems()));
+        } catch (SQLException e) {
+            showError("Load Error", e.getMessage());
+        }
     }
 
     private void showInfo(String msg) {
@@ -175,16 +166,16 @@ public class FeedbackView {
     }
 
     @FXML
-    void openAjouterFeed() {
+    void openAjouterFeed(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterFeed.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter Feedback");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            showError("Error", "Failed to load Add Feedback window: " + e.getMessage());
+            Parent gameView = FXMLLoader.load(getClass().getResource("/AjouterFeed.fxml"));
+            Scene gameScene = new Scene(gameView);
+
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.setScene(gameScene);
+            window.setTitle("Ajouter Feedback");
+            window.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -205,7 +196,6 @@ public class FeedbackView {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateFeed.fxml"));
             Parent root = loader.load();
 
-            // Pass the selected feedback to UpdateFeed controller
             UpdateFeed controller = loader.getController();
             controller.setFeedbackToEdit(selectedFeedback);
 
@@ -233,4 +223,59 @@ public class FeedbackView {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void openFeedbackStatistics() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FeedbackStatistics.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) feedbackTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Feedback Statistics");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void addViewQRButtonToTable() {
+        colViewQR.setCellFactory(param -> new TableCell<Feedback, Void>() {
+            private final Button btn = new Button("View QR");
+
+            {
+                btn.setOnAction((ActionEvent event) -> {
+                    Feedback feedback = getTableView().getItems().get(getIndex());
+                    openQRImage(feedback.getId());
+                });
+                btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
+    }
+
+    private void openQRImage(int feedbackId) {
+        String filePath = "QRCode_" + feedbackId + ".png";  // Assuming QR codes are stored in the project root directory.
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            try {
+                java.awt.Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                showError("Error Opening QR Code", "Failed to open QR code image for Feedback ID: " + feedbackId);
+                e.printStackTrace();
+            }
+        } else {
+            showError("QR Code Not Found", "QR code image not found for Feedback ID: " + feedbackId + ". Please generate the QR code first.");
+        }
+    }
+
 }

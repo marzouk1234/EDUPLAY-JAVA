@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import Controllers.UpdateFeed?>
 
+<?import javafx.util.Callback?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.FeedbackView"
@@ -18,21 +19,34 @@
             <Button text="Delete" onAction="#handleDelete" styleClass="button" />
             <Button text="Refresh" onAction="#handleRefresh" styleClass="button" />
             <Button text="Back to Main" onAction="#goToMainView" styleClass="button" />
-            <TextField fx:id="searchField" promptText="Search by name..." onKeyReleased="#handleSearch" />
+            <TextField fx:id="searchField" promptText="Search..." onKeyReleased="#handleSearch" />
+            <ComboBox fx:id="fieldComboBox"
+                      prefWidth="150.0"
+                      promptText="Search by field" />
         </HBox>
     </top>
 
-    <!-- TableView Center -->
+    <!-- Center (TableView) -->
     <center>
-        <TableView fx:id="feedbackTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
-                   BorderPane.alignment="CENTER" styleClass="table-view">
-            <columns>
-                <TableColumn fx:id="colNom" text="Name" prefWidth="200" />
-                <TableColumn fx:id="colPrenom" text="Surname" prefWidth="200" />
-                <TableColumn fx:id="colFeedback" text="Feedback" prefWidth="200" />
-                <TableColumn fx:id="colRating" text="Rating" prefWidth="100" />
-            </columns>
-        </TableView>
+        <VBox spacing="10" alignment="CENTER">
+            <TableView fx:id="feedbackTable" prefHeight="400" prefWidth="700" tableMenuButtonVisible="true"
+                       styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colNom" text="Name" prefWidth="200" />
+                    <TableColumn fx:id="colPrenom" text="Surname" prefWidth="200" />
+                    <TableColumn fx:id="colFeedback" text="Feedback" prefWidth="200" />
+                    <TableColumn fx:id="colRating" text="Rating" prefWidth="100" />
+                    <TableColumn fx:id="colViewQR" text="View QR" prefWidth="100" />
+                </columns>
+            </TableView>
+
+            <!-- Pagination Buttons -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Previous" onAction="#handlePreviousPage" styleClass="button"/>
+                <Button text="Next" onAction="#handleNextPage" styleClass="button"/>
+                <Button text="Show Feedback Statistics" onAction="#openFeedbackStatistics" styleClass="button"/>
+            </HBox>
+        </VBox>
     </center>
 
 </BorderPane>

@@ -4,9 +4,16 @@ import Models.Feedback;
 import Models.Game;
 import Services.GameService1;
 import Services.FeedbackService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class AjouterFeed {
@@ -32,6 +39,9 @@ public class AjouterFeed {
     @FXML
     void handleAdd() {
         try {
+            // Ensure Twilio is initialized
+            SMSService.initializeTwilio();  // Initialize Twilio before sending SMS
+
             // Validate and retrieve the Game ID (id_jeux)
             String idJeuxText = tfIdJeux.getText();
             if (idJeuxText == null || idJeuxText.isEmpty()) {
@@ -77,8 +87,15 @@ public class AjouterFeed {
             // Call the service to add feedback to the database
             feedbackService.ajouter(fb);
 
+            // Send SMS to admin notifying about the new feedback
+            SMSService.sendSMS(); // Send the simple message to admin
+
+            // Show success message
             showInfo("Feedback added successfully!");
-            loadTable();  // Refresh the table
+
+            // Refresh the table
+            loadTable();
+
         } catch (Exception e) {
             showError("Add Error", e.getMessage());
         }
@@ -103,5 +120,20 @@ public class AjouterFeed {
     private void loadTable() {
         // Implement table reloading logic here
         System.out.println("Reload the feedback table.");
+    }
+    @FXML
+    private void loadFeedbackView(ActionEvent event) {
+        try {
+            Parent feedbackView = FXMLLoader.load(getClass().getResource("/FeedbackView.fxml"));
+            Scene feedbackScene = new Scene(feedbackView);
+
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.setScene(feedbackScene);
+            window.setTitle("Liste des feedback");
+            window.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle error, maybe show an alert to the user
+        }
     }
 }

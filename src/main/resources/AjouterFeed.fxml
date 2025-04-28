@@ -51,6 +51,9 @@
 
             <!-- Bouton Ajouter Feedback -->
             <Button fx:id="ajouterFeedbackButton" text="Ajouter Feedback" onAction="#handleAdd" styleClass="button"/>
+            <Button text="Return to Feedback View" fx:id="btnReturn" onAction="#loadFeedbackView"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8;"
+                    prefWidth="200" prefHeight="40" />
 
         </VBox>
     </children>

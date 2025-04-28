@@ -5,11 +5,13 @@ import Services.GameService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
+import javafx.scene.layout.VBox;
 import java.sql.Date;
 import java.sql.SQLException;
 
 public class AjouterGame {
+    @FXML
+    private VBox formLayout;
 
     @FXML
     private TextField tfId, tfNom, tfPrenom;
@@ -20,15 +22,16 @@ public class AjouterGame {
     @FXML
     private DatePicker tfDate;
 
-    private final GameService gameService = new GameService();
+    private final GameService gameService;
 
     public AjouterGame() throws SQLException {
-        // Constructeur par défaut requis si GameService lance SQLException
+        this.gameService = new GameService();
     }
 
     @FXML
     public void initialize() {
-        cbType.getItems().addAll("puzzle", "snake", "chess");
+        cbType.getItems().addAll("puzzle", "snake", "chess", "Trivia");
+        formLayout = (VBox) tfId.getParent().getParent();
     }
 
     @FXML
@@ -39,7 +42,7 @@ public class AjouterGame {
                     tfPrenom.getText().isEmpty() ||
                     cbType.getValue() == null ||
                     tfDate.getValue() == null) {
-                showError("Champs obligatoires", "Tous les champs doivent être remplis.");
+                showError("Champs obligatoires", "Tous les champs doivent être remplis, y compris le type de jeu.");
                 return;
             }
 
@@ -61,13 +64,17 @@ public class AjouterGame {
             gameService.ajouter(game);
             showInfo("Ajout réussi !");
             clearForm();
-            loadTable();
+
+            if (game.getType().equals("Trivia")) {
+                formLayout.getChildren().clear();
+                TriviaGame triviaGame = new TriviaGame(formLayout);
+                formLayout.getChildren().add(triviaGame.start());
+            }
 
         } catch (NumberFormatException e) {
             showError("ID invalide", "L'ID doit être un nombre entier.");
         } catch (Exception e) {
             showError("Erreur d'ajout", e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -92,11 +99,7 @@ public class AjouterGame {
         tfNom.clear();
         tfPrenom.clear();
         cbType.getSelectionModel().clearSelection();
+        cbType.setValue("Trivia");
         tfDate.setValue(null);
-    }
-
-    private void loadTable() {
-        // Placeholder : à remplacer si tu as une TableView à recharger
-        System.out.println("Table des jeux rechargée (placeholder).");
     }
 }

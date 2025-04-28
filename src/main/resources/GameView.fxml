@@ -18,20 +18,31 @@
          <Button text="Delete" onAction="#handleDelete" styleClass="button" />
          <Button text="Refresh" onAction="#handleRefresh" styleClass="button" />
          <Button text="Back to Main" onAction="#goToMainView" styleClass="button" />
+         <TextField fx:id="searchField" promptText="Search..." onKeyReleased="#handleSearch" />
+         <ComboBox fx:id="fieldComboBox"
+                   prefWidth="150.0"
+                   promptText="Search by field" />
       </HBox>
    </top>
 
    <!-- TableView Center -->
    <center>
-      <TableView fx:id="gameTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
-                 BorderPane.alignment="CENTER" styleClass="table-view">
+      <VBox spacing="10" alignment="CENTER">
+      <TableView fx:id="gameTable" prefHeight="400" prefWidth="760" tableMenuButtonVisible="true"
+                  styleClass="table-view">
          <columns>
-            <TableColumn fx:id="colNom" text="Name" prefWidth="200" />
-            <TableColumn fx:id="colPrenom" text="Surname" prefWidth="200" />
-            <TableColumn fx:id="colType" text="Type Game" prefWidth="200" />
+            <TableColumn fx:id="colNom" text="Name" prefWidth="150" />
+            <TableColumn fx:id="colPrenom" text="Surname" prefWidth="150" />
+            <TableColumn fx:id="colType" text="Type Game" prefWidth="150" />
             <TableColumn fx:id="colDate" text="Date" prefWidth="100" />
+            <TableColumn fx:id="colAction" text="Action" prefWidth="150" />
          </columns>
       </TableView>
+      <HBox spacing="10" alignment="CENTER">
+         <Button text="Previous" onAction="#handlePreviousPage" styleClass="button"/>
+         <Button text="Next" onAction="#handleNextPage" styleClass="button"/>
+      </HBox>
+      </VBox>
    </center>
 
 </BorderPane>

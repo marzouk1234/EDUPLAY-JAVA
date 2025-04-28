@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.TriviaGame"
+            style="-fx-background-color: #f0f8ff; -fx-padding: 30;">
+
+    <VBox alignment="CENTER" spacing="20" BorderPane.alignment="CENTER">
+        <Label fx:id="lblCategory" style="-fx-font-size: 20px; -fx-text-fill: #333;" />
+
+        <Label fx:id="lblQuestion" wrapText="true"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #444;"
+               maxWidth="400"/>
+
+        <VBox spacing="10">
+            <RadioButton fx:id="choice1" style="-fx-font-size: 16px;" />
+            <RadioButton fx:id="choice2" style="-fx-font-size: 16px;" />
+            <RadioButton fx:id="choice3" style="-fx-font-size: 16px;" />
+            <RadioButton fx:id="choice4" style="-fx-font-size: 16px;" />
+        </VBox>
+
+        <Button text="Submit Answer" fx:id="submitButton"
+                onAction="#handleSubmit"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 8 20 8 20;"/>
+    </VBox>
+</BorderPane>
+
