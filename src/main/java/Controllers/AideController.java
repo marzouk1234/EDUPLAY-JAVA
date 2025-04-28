@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AideController {
     @FXML
@@ -39,19 +40,27 @@ public class AideController {
     @FXML
     private TextField searchField;
     @FXML
+    private ComboBox<Form_p> formFilterComboBox;
+    @FXML
     private Label statusLabel;
+    @FXML
+    private Label countLabel;
 
     private AideService aideService;
     private Form_pService formService;
     private ObservableList<Aide> aideList;
+    private ObservableList<Aide> filteredList;
     private Map<Integer, String> formSujets;
+    private Map<Integer, Form_p> formMap;
 
     @FXML
     public void initialize() {
         aideService = new AideService();
         formService = new Form_pService();
         aideList = FXCollections.observableArrayList();
+        filteredList = FXCollections.observableArrayList();
         formSujets = new HashMap<>();
+        formMap = new HashMap<>();
 
         // Configuration des colonnes
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -68,22 +77,69 @@ public class AideController {
             return new SimpleStringProperty(sujet);
         });
 
+        // Configuration du ComboBox de filtre par formulaire
+        formFilterComboBox.setPromptText("Tous les formulaires");
+        formFilterComboBox.getItems().add(null); // Option pour afficher tous les formulaires
+        formFilterComboBox.getSelectionModel().selectFirst();
+        
+        // Configuration des cellules du ComboBox
+        formFilterComboBox.setCellFactory(param -> new ListCell<Form_p>() {
+            @Override
+            protected void updateItem(Form_p item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Tous les formulaires");
+                } else {
+                    setText(item.getSujet());
+                }
+            }
+        });
+        
+        formFilterComboBox.setButtonCell(new ListCell<Form_p>() {
+            @Override
+            protected void updateItem(Form_p item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Tous les formulaires");
+                } else {
+                    setText(item.getSujet());
+                }
+            }
+        });
+
         // Chargement des données
         loadAides();
         loadFormSujets();
 
         // Configuration de la recherche
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterAides(newValue);
+            applyFilters();
         });
+        
+        // Configuration du filtre par formulaire
+        formFilterComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilters();
+        });
+        
+        // Mise à jour du compteur
+        updateCountLabel();
     }
 
     private void loadFormSujets() {
         try {
             List<Form_p> forms = formService.getAll();
+            formSujets.clear();
+            formMap.clear();
+            formFilterComboBox.getItems().clear();
+            formFilterComboBox.getItems().add(null); // Option pour afficher tous les formulaires
+            
             for (Form_p form : forms) {
                 formSujets.put(form.getId(), form.getSujet());
+                formMap.put(form.getId(), form);
+                formFilterComboBox.getItems().add(form);
             }
+            
+            formFilterComboBox.getSelectionModel().selectFirst();
         } catch (SQLException e) {
             statusLabel.setText("Erreur lors du chargement des formulaires: " + e.getMessage());
         }
@@ -93,27 +149,45 @@ public class AideController {
         try {
             aideList.clear();
             aideList.addAll(aideService.getAllWithFormDetails());
-            aideTable.setItems(aideList);
+            applyFilters();
             statusLabel.setText("Données chargées avec succès");
         } catch (SQLException e) {
             statusLabel.setText("Erreur lors du chargement des données: " + e.getMessage());
         }
     }
-
-    private void filterAides(String searchText) {
-        if (searchText == null || searchText.isEmpty()) {
-            aideTable.setItems(aideList);
-            return;
-        }
-
-        ObservableList<Aide> filteredList = FXCollections.observableArrayList();
+    
+    private void applyFilters() {
+        String searchText = searchField.getText().toLowerCase();
+        Form_p selectedForm = formFilterComboBox.getValue();
+        
+        filteredList.clear();
+        
         for (Aide aide : aideList) {
-            if (aide.getSujet().toLowerCase().contains(searchText.toLowerCase()) ||
-                aide.getDescription().toLowerCase().contains(searchText.toLowerCase())) {
+            boolean matchesSearch = searchText.isEmpty() || 
+                                   aide.getSujet().toLowerCase().contains(searchText) ||
+                                   aide.getDescription().toLowerCase().contains(searchText);
+            
+            boolean matchesForm = selectedForm == null || 
+                                 (aide.getFormId() == selectedForm.getId());
+            
+            if (matchesSearch && matchesForm) {
                 filteredList.add(aide);
             }
         }
+        
         aideTable.setItems(filteredList);
+        updateCountLabel();
+    }
+    
+    private void updateCountLabel() {
+        int totalCount = aideList.size();
+        int filteredCount = filteredList.size();
+        
+        if (totalCount == filteredCount) {
+            countLabel.setText(totalCount + " aide(s) au total");
+        } else {
+            countLabel.setText(filteredCount + " aide(s) sur " + totalCount + " au total");
+        }
     }
 
     @FXML

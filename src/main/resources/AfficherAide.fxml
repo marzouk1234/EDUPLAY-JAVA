@@ -3,45 +3,99 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.AideController"
-            stylesheets="@style.css"
-            styleClass="root">
+<AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1000.0" styleClass="root" stylesheets="@style.css" 
+            xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="Controllers.AfficherAideController">
 
-    <!-- Top Bar -->
-    <top>
-        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
-            <Label text="Liste des Aides" styleClass="title-label"/>
-            <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="200"/>
-            <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="ajouterAideBtn" onAction="#handleAjouterAide" text="Ajouter une aide" styleClass="button"/>
-            <Button fx:id="modifierAideBtn" onAction="#handleModifierAide" text="Modifier une aide" styleClass="button"/>
-            <Button fx:id="supprimerAideBtn" onAction="#handleSupprimerAide" text="Supprimer une aide" styleClass="button"/>
-            <Button fx:id="refreshBtn" onAction="#handleRefresh" text="Actualiser" styleClass="button"/>
+    <VBox spacing="15" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <padding>
+            <Insets top="10" right="20" bottom="15" left="20"/>
+        </padding>
+        
+        <!-- Entête avec titre et décoration -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Rectangle width="8" height="32" fill="#3498db" arcWidth="4" arcHeight="4"/>
+            <Label styleClass="title-label" text="Liste des Aides" />
         </HBox>
-    </top>
-
-    <!-- TableView Center -->
-    <center>
-        <TableView fx:id="aideTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
-                   BorderPane.alignment="CENTER" styleClass="table-view">
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                <TableColumn fx:id="sujetColumn" text="Sujet" prefWidth="150"/>
-                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
-                <TableColumn fx:id="dateCreationColumn" text="Date de création" prefWidth="150"/>
-                <TableColumn fx:id="formSujetColumn" text="Formulaire associé" prefWidth="150"/>
-            </columns>
-        </TableView>
-    </center>
-
-    <!-- Bottom Bar (Optional for Status Label) -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="bottom-bar">
+        
+        <!-- Description -->
+        <Text styleClass="description-text" text="Consultez et gérez toutes les aides disponibles dans le système." />
+        
+        <!-- Barre de recherche et filtres -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="10" left="5"/>
+            </padding>
+            <ComboBox fx:id="filterComboBox" prefWidth="150" promptText="Filtrer par" styleClass="filter-combo"/>
+            <TextField fx:id="searchField" promptText="Rechercher une aide..." prefWidth="300" styleClass="search-field"/>
+            <HBox HBox.hgrow="ALWAYS" />
             <Label fx:id="statusLabel" styleClass="status-label"/>
         </HBox>
-    </bottom>
-
-</BorderPane>
+        
+        <!-- Tableau avec ombres et bordures arrondies -->
+        <TableView fx:id="aideTable" VBox.vgrow="ALWAYS" styleClass="animated-table">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="0.0" text="N°" visible="false" />
+                <TableColumn fx:id="sujetColumn" prefWidth="200" text="Sujet" />
+                <TableColumn fx:id="descriptionColumn" prefWidth="300" text="Description" />
+                <TableColumn fx:id="dateCreationColumn" prefWidth="120" text="Date de création" />
+                <TableColumn fx:id="formSujetColumn" prefWidth="150" text="Formulaire associé" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <placeholder>
+                <Label text="Aucune aide disponible" />
+            </placeholder>
+        </TableView>
+        
+        <!-- Barre de boutons avec effets d'animation -->
+        <HBox spacing="20" alignment="CENTER" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="0" bottom="10" left="0"/>
+            </padding>
+            <Button fx:id="ajouterButton" onAction="#handleAjouter" styleClass="button-primary, animated-button" text="Ajouter" />
+            <Button fx:id="modifierButton" onAction="#handleModifier" styleClass="button-info, animated-button" text="Modifier" />
+            <Button fx:id="supprimerButton" onAction="#handleSupprimer" styleClass="button-danger, animated-button" text="Supprimer" />
+            <Button fx:id="refreshButton" onAction="#handleRefresh" styleClass="button, animated-button" text="Actualiser" />
+            <Button fx:id="chatbotButton" onAction="#handleChatbot" styleClass="button-success, animated-button" text="Assistant IA" />
+        </HBox>
+        
+        <!-- Section chatbot dans un TitledPane amélioré - Taille augmentée -->
+        <TitledPane fx:id="chatbotPane" text="Assistant IA - Poser une question" expanded="false" VBox.vgrow="ALWAYS" collapsible="true" 
+                   maxHeight="500.0" minHeight="200.0">
+            <VBox spacing="10">
+                <!-- WebView pour l'assistant IA -->
+                <WebView fx:id="chatWebView" prefHeight="300.0" minHeight="250.0" VBox.vgrow="ALWAYS" />
+                
+                <!-- Formulaire pour ajouter une question personnalisée -->
+                <TitledPane text="Ajouter ma propre question" expanded="false">
+                    <VBox spacing="10">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <TextField fx:id="questionTitleField" promptText="Titre de la question" styleClass="search-field"/>
+                        <TextArea fx:id="questionContentArea" promptText="Contenu de la question..." 
+                                 prefHeight="100.0" wrapText="true" styleClass="search-field"/>
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <Button fx:id="submitQuestionButton" onAction="#handleSubmitQuestion" 
+                                   styleClass="button-primary, animated-button" text="Soumettre la question" />
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+            </VBox>
+        </TitledPane>
+        
+        <!-- Barre de status en bas -->
+        <HBox alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="5" left="5"/>
+            </padding>
+            <Label fx:id="countLabel" styleClass="count-label"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

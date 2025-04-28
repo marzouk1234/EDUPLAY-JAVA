@@ -5,6 +5,8 @@ import Services.Form_pService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +22,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -56,12 +60,29 @@ public class AfficherForm_pController implements Initializable {
 
     @FXML
     private Button supprimerButton;
+    
+    @FXML
+    private Button refreshButton;
+    
+    @FXML
+    private TextField searchField;
+    
+    @FXML
+    private Label statusLabel;
+    
+    @FXML
+    private Label countLabel;
 
     @FXML
     private AnchorPane rootPane;
 
+    @FXML
+    private DatePicker dateFilter;
+
     private Form_pService formService;
     private ObservableList<Form_p> formList;
+    private FilteredList<Form_p> filteredData;
+    private SortedList<Form_p> sortedData;
     private ScheduledExecutorService scheduler;
 
     @Override
@@ -84,11 +105,10 @@ public class AfficherForm_pController implements Initializable {
             });
             auteurColumn.setCellValueFactory(new PropertyValueFactory<>("auteur"));
 
-            // Ajouter un tooltip aux cellules du contenu (qui peut être long)
+            // Configurer le tooltip pour le contenu
             contenuColumn.setCellFactory(tc -> {
                 TableCell<Form_p, String> cell = new TableCell<>();
                 Tooltip tooltip = new Tooltip();
-                
                 cell.textProperty().bind(cell.itemProperty());
                 cell.setOnMouseEntered(event -> {
                     if (cell.getText() != null && !cell.getText().isEmpty()) {
@@ -101,6 +121,9 @@ public class AfficherForm_pController implements Initializable {
 
             // Load data
             loadFormData();
+            
+            // Configurer la recherche
+            setupSearchAndSort();
 
             // Add listener for row selection
             formTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -113,13 +136,60 @@ public class AfficherForm_pController implements Initializable {
             modifierButton.setDisable(true);
             supprimerButton.setDisable(true);
             
-            // Configurer le rafraîchissement automatique toutes les 5 secondes (plus court pour voir les changements plus rapidement)
+            // Configurer le rafraîchissement automatique toutes les 5 secondes
             startAutoRefresh();
             
+            // Configuration du filtre par date
+            setupDateFilter();
+            
+            statusLabel.setText("Interface initialisée avec succès");
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur d'initialisation", 
                     "Impossible d'initialiser l'écran: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    private void setupSearchAndSort() {
+        // Configurer le filtre
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> applyFilter());
+        dateFilter.valueProperty().addListener((observable, oldValue, newValue) -> applyFilter());
+    }
+    
+    private void applyFilter() {
+        if (filteredData == null) return;
+        
+        String searchText = searchField.getText().toLowerCase();
+        LocalDate selectedDate = dateFilter.getValue();
+
+        filteredData.setPredicate(form -> {
+            if (form == null) return false;
+
+            boolean matchesSearch = searchText == null || searchText.isEmpty() ||
+                    form.getSujet().toLowerCase().contains(searchText) ||
+                    form.getContenu().toLowerCase().contains(searchText) ||
+                    form.getAuteur().toLowerCase().contains(searchText);
+
+            boolean matchesDate = selectedDate == null ||
+                    form.getDatePub().equals(selectedDate);
+
+            return matchesSearch && matchesDate;
+        });
+        
+        updateCountLabel();
+    }
+    
+    private void updateCountLabel() {
+        if (filteredData == null) {
+            filteredData = new FilteredList<>(formList, p -> true);
+        }
+        int totalCount = formList.size();
+        int filteredCount = filteredData.size();
+        
+        if (totalCount == filteredCount) {
+            countLabel.setText(totalCount + " formulaire(s) au total");
+        } else {
+            countLabel.setText(filteredCount + " formulaire(s) sur " + totalCount + " au total");
         }
     }
     
@@ -134,7 +204,7 @@ public class AfficherForm_pController implements Initializable {
         scheduler.scheduleAtFixedRate(() -> {
             // Exécution sur le thread JavaFX
             Platform.runLater(this::loadFormData);
-        }, 5, 5, TimeUnit.SECONDS); // Réduit à 5 secondes pour plus de réactivité
+        }, 5, 5, TimeUnit.SECONDS);
     }
     
     private void stopAutoRefresh() {
@@ -163,8 +233,17 @@ public class AfficherForm_pController implements Initializable {
             // Convert to observable list
             formList = FXCollections.observableArrayList(forms);
             
-            // Set items in table
-            formTable.setItems(formList);
+            // Configurer le FilteredList si c'est la première fois
+            if (filteredData == null) {
+                filteredData = new FilteredList<>(formList, p -> true);
+                // Créer et configurer le SortedList
+                sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(formTable.comparatorProperty());
+                formTable.setItems(sortedData);
+            }
+            
+            // Appliquer le filtre actuel
+            applyFilter();
             
             // Restaurer la sélection si possible
             if (selectedId != null) {
@@ -177,8 +256,11 @@ public class AfficherForm_pController implements Initializable {
                     });
             }
             
+            // Mettre à jour le compteur
+            updateCountLabel();
+            
             // Informer si aucun formulaire n'est trouvé
-            if (forms.isEmpty() && formTable.getItems().isEmpty()) {
+            if (forms.isEmpty()) {
                 Platform.runLater(() -> {
                     showAlert(Alert.AlertType.INFORMATION, "Aucune donnée", 
                             "Aucun formulaire trouvé dans la base de données.");
@@ -201,18 +283,18 @@ public class AfficherForm_pController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterForm_p.fxml"));
             Parent root = loader.load();
             
-            // Create new stage
+            // Create a new stage for the add form
             Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Ajouter un formulaire");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(rootPane.getScene().getWindow());
             
-            // Show stage and wait until closed
+            // Show the stage and wait for it to close
             stage.showAndWait();
             
-            // Refresh table immediately after closing
+            // Refresh the data after the form is closed
             loadFormData();
+            
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", 
                     "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
@@ -222,6 +304,7 @@ public class AfficherForm_pController implements Initializable {
 
     @FXML
     public void handleModifier(ActionEvent event) {
+        // Get the selected form
         Form_p selectedForm = formTable.getSelectionModel().getSelectedItem();
         
         if (selectedForm == null) {
@@ -235,22 +318,22 @@ public class AfficherForm_pController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierForm_p.fxml"));
             Parent root = loader.load();
             
-            // Get the controller and set the form data
+            // Get the controller and set the form to modify
             ModifierForm_pController controller = loader.getController();
             controller.setFormData(selectedForm);
             
-            // Create new stage
+            // Create a new stage for the modify form
             Stage stage = new Stage();
-            stage.setTitle("Modifier le formulaire");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modifier un formulaire");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(rootPane.getScene().getWindow());
             
-            // Show stage and wait until closed
+            // Show the stage and wait for it to close
             stage.showAndWait();
             
-            // Refresh table immediately after closing
+            // Refresh the data after the form is closed
             loadFormData();
+            
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", 
                     "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
@@ -260,6 +343,7 @@ public class AfficherForm_pController implements Initializable {
 
     @FXML
     public void handleSupprimer(ActionEvent event) {
+        // Get the selected form
         Form_p selectedForm = formTable.getSelectionModel().getSelectedItem();
         
         if (selectedForm == null) {
@@ -269,48 +353,52 @@ public class AfficherForm_pController implements Initializable {
         }
         
         // Confirm deletion
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Confirmation de suppression");
-        confirmAlert.setHeaderText("Supprimer le formulaire");
-        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer ce formulaire?");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer ce formulaire ?");
         
-        Optional<ButtonType> result = confirmAlert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+        
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                // Delete from database
+                // Delete the form
                 formService.delete(selectedForm);
                 
-                // Remove from table
-                formList.remove(selectedForm);
+                // Refresh the data
+                loadFormData();
                 
-                showAlert(Alert.AlertType.INFORMATION, "Suppression réussie", 
+                showAlert(Alert.AlertType.INFORMATION, "Succès", 
                         "Le formulaire a été supprimé avec succès.");
                 
-                // Reload data in case there are other changes
-                loadFormData();
             } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de suppression", 
+                showAlert(Alert.AlertType.ERROR, "Erreur", 
                         "Impossible de supprimer le formulaire: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
+    
+    @FXML
+    public void handleRefresh(ActionEvent event) {
+        loadFormData();
+    }
 
     private void showAlert(Alert.AlertType type, String title, String content) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(content);
-            alert.showAndWait();
-        });
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
-    
-    // Méthode appelée lorsque la fenêtre est fermée
+
     public void cleanup() {
         stopAutoRefresh();
-        if (formService != null) {
-            formService.closeConnection();
-        }
+    }
+
+    private void setupDateFilter() {
+        dateFilter.valueProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilter();
+        });
     }
 } 

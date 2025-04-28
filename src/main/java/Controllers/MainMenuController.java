@@ -5,34 +5,56 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
+import javafx.stage.Modality;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainMenuController {
     
+    private Map<String, Stage> openWindows = new HashMap<>();
+    
     @FXML
     private void handleOpenFormulaires() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherForm_p.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Gestion des Formulaires");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        openWindow("formulaires", "/AfficherForm_p.fxml", "Liste des Formulaires");
     }
     
     @FXML
     private void handleOpenAides() {
+        openWindow("aides", "/AfficherAide.fxml", "Liste des Aides");
+    }
+    
+    private void openWindow(String key, String fxmlPath, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherAide.fxml"));
+            // Si la fenêtre existe déjà, la mettre au premier plan
+            if (openWindows.containsKey(key)) {
+                Stage existingStage = openWindows.get(key);
+                if (existingStage.isShowing()) {
+                    existingStage.toFront();
+                    return;
+                } else {
+                    openWindows.remove(key);
+                }
+            }
+            
+            // Charger la nouvelle fenêtre
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+            
             Stage stage = new Stage();
-            stage.setTitle("Gestion des Aides");
+            stage.setTitle(title);
+            stage.initModality(Modality.NONE); // Permet d'interagir avec d'autres fenêtres
             stage.setScene(new Scene(root));
+            
+            // Gérer la fermeture de la fenêtre
+            stage.setOnHiding(event -> openWindows.remove(key));
+            
+            // Stocker la référence de la fenêtre
+            openWindows.put(key, stage);
+            
+            // Afficher la fenêtre
             stage.show();
-        } catch (IOException e) {
+            
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
