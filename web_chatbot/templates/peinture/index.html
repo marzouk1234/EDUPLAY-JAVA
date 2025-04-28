@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant EduPlay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header .logo {
+            width: 28px;
+            height: 28px;
+            margin-right: 10px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        
+        #chatbot {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scroll-behavior: smooth;
+            background: linear-gradient(180deg, #f9f9ff 0%, #ffffff 100%);
+        }
+        
+        .message {
+            display: flex;
+            align-items: flex-start;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin: 0 10px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border: 2px solid white;
+        }
+        
+        .user .avatar {
+            background-image: url('https://ui-avatars.com/api/?name=Vous&background=3498db&color=fff&bold=true');
+        }
+        
+        .bot .avatar {
+            background-image: url('https://ui-avatars.com/api/?name=EP&background=28a745&color=fff&bold=true');
+        }
+        
+        .bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            min-width: 40px;
+            line-height: 1.5;
+            max-width: calc(100% - 60px);
+        }
+        
+        .user .bubble {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-top-right-radius: 2px;
+        }
+        
+        .bot .bubble {
+            background-color: #f0f2f5;
+            color: #333;
+            border-top-left-radius: 2px;
+        }
+        
+        .typing {
+            display: flex;
+            padding: 12px 16px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            margin: 0 1px;
+            background-color: #999;
+            border-radius: 50%;
+            animation: typingAnimation 1.5s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.5s; }
+        .typing-dot:nth-child(3) { animation-delay: 1s; }
+        
+        @keyframes typingAnimation {
+            0% { transform: translateY(0px); background-color: #999; }
+            50% { transform: translateY(-5px); background-color: #666; }
+            100% { transform: translateY(0px); background-color: #999; }
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 16px;
+            background-color: #f5f7fa;
+            border-top: 1px solid #eaeaea;
+            position: relative;
+        }
+        
+        #userInput {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 24px;
+            background: white;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        #userInput:focus {
+            box-shadow: 0 3px 12px rgba(52, 152, 219, 0.15);
+            background: #fafeff;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 46px;
+            height: 46px;
+            margin-left: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        }
+        
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            padding: 30px 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background-color: rgba(52, 152, 219, 0.05);
+            border-radius: 12px;
+            margin: 10px 0;
+            border: 1px dashed rgba(52, 152, 219, 0.2);
+        }
+        
+        /* Suggestions rapides */
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .suggestion-chip {
+            background-color: white;
+            border: 1px solid #3498db;
+            color: #3498db;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .suggestion-chip:hover {
+            background-color: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Marque de temps */
+        .timestamp {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 4px;
+            text-align: right;
+        }
+        
+        .bot .timestamp {
+            text-align: left;
+        }
+        
+        /* Scroll personnalisé */
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #messages::-webkit-scrollbar-track {
+            background: #f5f7fa;
+        }
+        
+        #messages::-webkit-scrollbar-thumb {
+            background-color: rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+        }
+        
+        /* Styles spéciaux pour du code ou du formatage */
+        .bot .bubble pre {
+            background-color: rgba(0,0,0,0.05);
+            padding: 8px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 8px 0;
+            font-family: monospace;
+        }
+        
+        .bot .bubble ul, .bot .bubble ol {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+        
+        /* État de connexion */
+        .connection-status {
+            position: absolute;
+            bottom: 10px;
+            left: 18px;
+            font-size: 0.7rem;
+            color: #999;
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #2ecc71;
+            margin-right: 6px;
+        }
+        
+        /* Mode sombre (pour la prochaine version) */
+        .darkmode-toggle {
+            position: absolute;
+            top: 18px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+        
+        .darkmode-toggle:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbot">
+        <div class="header">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+            <h2>Assistant IA EduPlay</h2>
+            <button class="darkmode-toggle" title="Mode sombre (prochainement)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="messages">
+            <div class="welcome-message">
+                <strong>👋 Bienvenue sur l'assistant EduPlay !</strong><br>
+                Je suis là pour répondre à vos questions sur l'application. Comment puis-je vous aider aujourd'hui ?
+                
+                <div class="suggestions">
+                    <div class="suggestion-chip" onclick="usesuggestion('Comment ajouter un formulaire ?')">Comment ajouter un formulaire ?</div>
+                    <div class="suggestion-chip" onclick="usesuggestion('Quelle est la différence entre Aide et Formulaire ?')">Différence Aide/Formulaire</div>
+                    <div class="suggestion-chip" onclick="usesuggestion('Comment filtrer les résultats ?')">Filtrer les résultats</div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Posez votre question..." onkeydown="if(event.key==='Enter'){sendMessage();}" />
+            <button class="send-btn" onclick="sendMessage()" title="Envoyer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+            <div class="connection-status">
+                <div class="status-dot"></div>
+                <span>Connecté</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Fonction pour formater le texte (ajoute du support basique pour markdown)
+        function formatMessage(text) {
+            // Support des blocs de code
+            text = text.replace(/```([^`]+)```/g, '<pre>$1</pre>');
+            
+            // Support du texte en gras
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Support du texte en italique
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Support des listes
+            text = text.replace(/^\s*-\s(.+)$/gm, '<ul><li>$1</li></ul>');
+            
+            // Retour à la ligne
+            text = text.replace(/\n/g, '<br>');
+            
+            return text;
+        }
+        
+        // Fonction pour obtenir l'heure actuelle formatée
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + 
+                  now.getMinutes().toString().padStart(2, '0');
+        }
+        
+        // Fonction pour faire défiler automatiquement vers le bas
+        function scrollToBottom() {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // Ajout de l'effet de frappe en attente
+        function showTypingIndicator() {
+            const messagesDiv = document.getElementById('messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typing-indicator';
+            
+            typingDiv.innerHTML = `
+                <div class="avatar"></div>
+                <div class="bubble typing">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(typingDiv);
+            scrollToBottom();
+        }
+        
+        // Suppression de l'effet de frappe
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Utiliser une suggestion
+        function usesuggestion(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const messagesDiv = document.getElementById('messages');
+            const currentTime = getCurrentTime();
+            
+            // Ajout du message utilisateur
+            messagesDiv.innerHTML += `
+                <div class="message user">
+                    <div class="avatar"></div>
+                    <div class="bubble">
+                        ${message}
+                        <div class="timestamp">${currentTime}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Effacer l'input et scroll
+            input.value = '';
+            scrollToBottom();
+            
+            // Afficher l'indicateur de frappe
+            showTypingIndicator();
+            
+            // Appel à l'API
+            fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Cacher l'indicateur de frappe
+                hideTypingIndicator();
+                
+                const formattedReply = formatMessage(data.reply);
+                const currentTime = getCurrentTime();
+                
+                // Ajouter la réponse du bot
+                messagesDiv.innerHTML += `
+                    <div class="message bot">
+                        <div class="avatar"></div>
+                        <div class="bubble">
+                            ${formattedReply}
+                            <div class="timestamp">${currentTime}</div>
+                        </div>
+                    </div>
+                `;
+                
+                scrollToBottom();
+            })
+            .catch(err => {
+                hideTypingIndicator();
+                const currentTime = getCurrentTime();
+                
+                messagesDiv.innerHTML += `
+                    <div class="message bot">
+                        <div class="avatar"></div>
+                        <div class="bubble">
+                            Désolé, une erreur s'est produite lors de la communication avec le serveur.
+                            <div class="timestamp">${currentTime}</div>
+                        </div>
+                    </div>
+                `;
+                scrollToBottom();
+                
+                // Afficher que la connexion est perdue
+                const statusDot = document.querySelector('.status-dot');
+                const statusText = document.querySelector('.connection-status span');
+                
+                statusDot.style.backgroundColor = '#e74c3c';
+                statusText.textContent = 'Déconnecté';
+            });
+        }
+        
+        // Lors du chargement
+        window.onload = function() {
+            document.getElementById('userInput').focus();
+        };
+    </script>
+</body>
+</html> 

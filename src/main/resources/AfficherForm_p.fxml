@@ -1,44 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="rootPane"
-            prefHeight="600.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.AfficherForm_pController"
-            stylesheets="@style.css"
-            styleClass="root">
+<AnchorPane fx:id="rootPane" prefHeight="650.0" prefWidth="950.0" styleClass="root"
+            stylesheets="/style.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AfficherForm_pController">
 
-    <VBox spacing="15" alignment="CENTER"
-          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
-          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+    <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
 
-        <Label text="Liste des Formulaires" styleClass="title-label"/>
+        <padding>
+            <Insets top="10" right="20" bottom="15" left="20"/>
+        </padding>
 
-        <TableView fx:id="formTable" prefHeight="400.0" prefWidth="860.0"
-                   styleClass="table-view">
+        <!-- En-tête -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Rectangle width="8" height="32" fill="#3498db" arcWidth="4" arcHeight="4"/>
+            <Label text="Liste des Formulaires" styleClass="title-label"/>
+        </HBox>
+
+        <!-- Description -->
+        <Text text="Consultez et gérez tous les formulaires disponibles dans le système."
+              styleClass="description-text"/>
+
+        <!-- Barre de recherche -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="10" left="5"/>
+            </padding>
+
+            <TextField fx:id="searchField" promptText="Rechercher un formulaire..." prefWidth="300" styleClass="search-field"/>
+            <DatePicker fx:id="dateFilter" promptText="Filtrer par date" styleClass="date-picker"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" styleClass="status-label"/>
+        </HBox>
+
+        <!-- Tableau -->
+        <TableView fx:id="formTable" VBox.vgrow="ALWAYS" styleClass="animated-table">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                <TableColumn fx:id="sujetColumn" text="Sujet" prefWidth="200"/>
-                <TableColumn fx:id="contenuColumn" text="Contenu" prefWidth="300"/>
-                <TableColumn fx:id="dateColumn" text="Date de Publication" prefWidth="120"/>
-                <TableColumn fx:id="auteurColumn" text="Auteur" prefWidth="150"/>
+                <TableColumn fx:id="idColumn" prefWidth="0.0" text="N°" visible="false"/>
+                <TableColumn fx:id="sujetColumn" prefWidth="200" text="Sujet"/>
+                <TableColumn fx:id="contenuColumn" prefWidth="300" text="Contenu"/>
+                <TableColumn fx:id="dateColumn" prefWidth="120" text="Date de Publication"/>
+                <TableColumn fx:id="auteurColumn" prefWidth="150" text="Auteur"/>
             </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <placeholder>
+                <Label text="Aucun formulaire disponible."/>
+            </placeholder>
         </TableView>
 
-        <HBox spacing="20" alignment="CENTER">
-            <Button fx:id="ajouterButton" onAction="#handleAjouter" text="Ajouter" styleClass="button-primary"/>
-            <Button fx:id="modifierButton" onAction="#handleModifier" text="Modifier" styleClass="button-info"/>
-            <Button fx:id="supprimerButton" onAction="#handleSupprimer" text="Supprimer" styleClass="button-danger"/>
+        <!-- Barre de boutons -->
+        <HBox spacing="15" alignment="CENTER" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="0" bottom="10" left="0"/>
+            </padding>
+
+            <!-- Boutons CRUD -->
+            <Button fx:id="ajouterButton" text="Ajouter" onAction="#handleAjouter"
+                    styleClass="button-primary, animated-button"/>
+            <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier"
+                    styleClass="button-info, animated-button"/>
+            <Button fx:id="supprimerButton" text="Supprimer" onAction="#handleSupprimer"
+                    styleClass="button-danger, animated-button"/>
+            <Button fx:id="refreshButton" text="Actualiser" onAction="#handleRefresh"
+                    styleClass="button, animated-button"/>
+
+            <!-- Boutons PDF, Mail, QR -->
+            <Button fx:id="pdfButton" text="Exporter PDF" onAction="#handleExportPdf"
+                    styleClass="button-secondary, animated-button"/>
+            <Button fx:id="mailButton" text="Envoyer Mail" onAction="#handleSendMail"
+                    styleClass="button-secondary, animated-button"/>
+            <Button fx:id="qrButton" text="Afficher QR" onAction="#handleShowQr"
+                    styleClass="button-secondary, animated-button"/>
         </HBox>
+
+        <!-- Barre de statut -->
+        <HBox alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="5" bottom="5" left="5"/>
+            </padding>
+            <Label fx:id="countLabel" styleClass="count-label"/>
+        </HBox>
+
     </VBox>
 </AnchorPane>
