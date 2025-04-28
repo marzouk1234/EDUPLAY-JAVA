@@ -4,33 +4,52 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controllers.ListeInscriptionController"
-            stylesheets="@style.css">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ListeInscriptionController" prefWidth="800" prefHeight="600">
+    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
 
-    <!-- Barre en haut avec bouton "Ajouter une inscription" -->
-    <top>
-        <ToolBar>
-            <Button text="Ajouter une inscription" onAction="#ouvrirFenetreAjoutInscription"/>
-            <Button text="Retour au Dashboard" onAction="#goToDashboard"/>
-        </ToolBar>
-    </top>
+        <!-- Liste des inscriptions -->
+        <VBox fx:id="inscriptionTableContainer" spacing="10">
+            <HBox spacing="10">
+                <Button text="Ajouter" onAction="#ouvrirFormulaireAjout"/>
+                <Button text="Retour" onAction="#goToDashboard"/>
+            </HBox>
 
-    <!-- TableView au centre -->
-    <center>
-        <TableView fx:id="inscriptionTable" prefWidth="600" prefHeight="400">
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-                <TableColumn fx:id="nomCoursColumn" text="Cours" prefWidth="200"/>
-                <TableColumn fx:id="dateColumn" text="Date d'inscription" prefWidth="200"/>
-                <TableColumn fx:id="supprimerCol" text="Action" prefWidth="100"/>
-            </columns>
-        </TableView>
-    </center>
+            <TableView fx:id="inscriptionTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="nomCoursColumn" text="Cours" prefWidth="200"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="modifierCol" text="Modifier" prefWidth="100"/>
+                    <TableColumn fx:id="supprimerCol" text="Supprimer" prefWidth="100"/>
 
-    <!-- Marge autour du contenu si besoin -->
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
+                </columns>
+            </TableView>
+        </VBox>
 
-</BorderPane>
+        <!-- Formulaire d'ajout/modification -->
+        <VBox fx:id="inscriptionFormContainer" spacing="10" visible="false" managed="false" style="-fx-background-color: #f0f0f0; -fx-padding: 15; -fx-border-color: #ccc; -fx-border-radius: 5;">
+            <Label text="Formulaire d'inscription" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <HBox spacing="10">
+                <Label text="Cours:"/>
+                <ComboBox fx:id="coursComboBox" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <Label text="Date d'inscription:"/>
+                <DatePicker fx:id="dateInscriptionPicker"/>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="emailField"  promptText="Entrez votre email" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            </HBox>
+            <HBox spacing="10">
+
+                <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerInscription"/>
+                <Button text="Annuler" onAction="#annulerAjout"/>
+
+            </HBox>
+        </VBox>
+
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListeCoursbackController">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
+            <Label text="Gestion des Cours (Back)" styleClass="title-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="ajouterCoursBtn" text="Ajouter un cours" onAction="#ouvrirFormulaireAjout"/>
+            <Button text="Retour Dashboard" onAction="#goToDashboard" />
+        </HBox>
+    </top>
+
+    <!-- Centre -->
+    <center>
+        <StackPane fx:id="contentStack">
+
+            <!-- TableView des cours -->
+            <AnchorPane fx:id="tableContainer">
+                <VBox>
+                    <TableView fx:id="coursTable" prefHeight="400.0" prefWidth="700.0">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" />
+                            <TableColumn fx:id="titreColumn" text="Titre" />
+                            <TableColumn fx:id="descriptionColumn" text="Description" />
+                            <TableColumn fx:id="chapitresColumn" text="Nb Chapitres" />
+                            <TableColumn fx:id="categorieColumn" text="Catégorie" />
+                            <TableColumn fx:id="pdfColumn" text="PDF" />
+                            <TableColumn fx:id="dateColumn" text="Date" />
+                            <TableColumn fx:id="modifierCol" text="Modifier" />
+                            <TableColumn fx:id="supprimerCol" text="Supprimer" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </AnchorPane>
+
+            <!-- Formulaire d'ajout -->
+            <AnchorPane fx:id="formContainer" prefHeight="400" prefWidth="700" visible="false">
+                <Label layoutX="50" layoutY="30" text="Titre :" />
+                <TextField fx:id="titreField" layoutX="150" layoutY="25" prefWidth="400" />
+                <Label fx:id="titreErreurLabel" layoutX="150" layoutY="55" styleClass="erreur-label"/>
+
+                <Label layoutX="50" layoutY="90" text="Description :" />
+                <TextField fx:id="descriptionField" layoutX="150" layoutY="85" prefWidth="400" />
+                <Label fx:id="descriptionErreurLabel" layoutX="150" layoutY="115" styleClass="erreur-label"/>
+
+                <Label layoutX="50" layoutY="150" text="Nb Chapitres :" />
+                <TextField fx:id="nbChapitresField" layoutX="150" layoutY="145" prefWidth="400" />
+                <Label fx:id="nbChapitresErreurLabel" layoutX="150" layoutY="175" styleClass="erreur-label" />
+
+                <Label layoutX="50" layoutY="210" text="Catégorie :" />
+                <ComboBox fx:id="categorieCombo" layoutX="150" layoutY="205" prefWidth="400"/>
+
+                <!-- Fichier PDF -->
+                <Label layoutX="50" layoutY="270" text="Fichier PDF :" />
+                <Button layoutX="150" layoutY="265" onAction="#choisirPDF" text="Choisir un fichier..." />
+                <Label fx:id="pdfLabel" layoutX="300" layoutY="270" text="Aucun fichier sélectionné" />
+                <Label fx:id="pdfErreurLabel" layoutX="300" layoutY="300" styleClass="erreur-label"/>
+
+                <!-- Date -->
+                <Label layoutX="50" layoutY="330" text="Date :" />
+                <DatePicker fx:id="datePicker" layoutX="150" layoutY="325" prefWidth="400" />
+
+                <!-- Boutons -->
+                <Button layoutX="150" layoutY="380" text="Enregistrer" onAction="#enregistrerCours"/>
+                <Button layoutX="270" layoutY="380" text="Annuler" onAction="#annulerAjout"/>
+            </AnchorPane>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

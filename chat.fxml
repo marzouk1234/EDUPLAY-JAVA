@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" style="-fx-padding: 10;" stylesheets="@chatbot.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ChatbotController">
+     <Button onAction="#goToDashboard" styleClass="button" text="Retour au Dashboard" />
+
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
+        <VBox fx:id="chatContainer" spacing="10" style="-fx-padding: 5;" />
+    </ScrollPane>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <TextField fx:id="questionField" promptText="Posez votre question..." HBox.hgrow="ALWAYS" />
+        <Button fx:id="sendButton" onAction="#handleSendQuestion" text="Envoyer" />
+    </HBox>
+</VBox>

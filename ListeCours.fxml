@@ -2,39 +2,97 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.ListeCoursController"
-            stylesheets="@style.css"
-            styleClass="root">
+<BorderPane prefHeight="500.0" prefWidth="800.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ListeCoursController">
 
     <!-- Top Bar -->
     <top>
-        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
-            <Label text="Liste des cours" styleClass="title-label"/>
-            <Region fx:id="spacer" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="ajouterCoursBtn" onAction="#ouvrirFenetreAjoutCours" text="Ajouter un cours" styleClass="button"/>
-            <Button fx:id="voirInscriptionsBtn" onAction="#allerAuxInscriptions" text="Voir les inscriptions" styleClass="button"/>
-            <Button text="Retour au Dashboard" onAction="#goToDashboard" styleClass="button"/>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar" BorderPane.alignment="TOP_LEFT">
+            <Label styleClass="title-label" text="Liste des cours" />
+            <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="voirInscriptionsBtn" onAction="#allerAuxInscriptions" styleClass="button" text="Bienvenue" />
+            <Button onAction="#goToDashboard" styleClass="button" text="Retour au Dashboard" />
         </HBox>
     </top>
 
-    <!-- TableView Center -->
+    <!-- Zone centrale avec StackPane -->
     <center>
-        <TableView fx:id="coursTable" prefHeight="500" prefWidth="760" tableMenuButtonVisible="true"
-                   BorderPane.alignment="CENTER" styleClass="table-view">
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID"/>
-                <TableColumn fx:id="titreColumn" text="Titre"/>
-                <TableColumn fx:id="chapitresColumn" text="Nb Chapitres"/>
-                <TableColumn fx:id="descriptionColumn" text="Description"/>
-                <TableColumn fx:id="dateColumn" text="Date"/>
-                <TableColumn fx:id="categorieColumn" text="Catégorie"/>
-                <TableColumn fx:id="modifierCol" prefWidth="75" text="Modifier"/>
-                <TableColumn fx:id="supprimerCol" prefWidth="88" text="Supprimer"/>
-            </columns>
-        </TableView>
+        <StackPane fx:id="contentStack" BorderPane.alignment="CENTER">
+
+            <!-- Table des cours -->
+            <AnchorPane fx:id="tableContainer">
+                <VBox fx:id="vboxCoursList" spacing="20">
+                    <TableView fx:id="coursTable" prefHeight="400.0" prefWidth="1000.0" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" />
+                            <TableColumn fx:id="titreColumn" text="Titre" />
+                            <TableColumn fx:id="chapitresColumn" text="Nb Chapitres" />
+                            <TableColumn fx:id="descriptionColumn" text="Description" />
+                            <TableColumn fx:id="categorieColumn" text="Catégorie" />
+                            <TableColumn fx:id="dateColumn" text="Date" />
+
+                            <!-- Commentaires pour cacher les fonctionnalités -->
+                            <!-- <TableColumn fx:id="qrCodeColumn" text="QR Code" /> -->
+                            <!-- <TableColumn fx:id="scannerColumn" text="Scanner" /> -->
+                            <!-- <TableColumn fx:id="modifierCol" text="Modifier" /> -->
+                            <!-- <TableColumn fx:id="supprimerCol" text="Supprimer" /> -->
+                        </columns>
+                    </TableView>
+
+
+                    <!-- Zone d'affichage du QR Code -->
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <Button fx:id="btnGenererQRCode" onAction="#handleGenerateQRCode" text="Générer QR Code" />
+
+                        <ImageView fx:id="qrCodeImageView" fitWidth="200" fitHeight="200" preserveRatio="true" />
+                        <Label fx:id="labelDetailsCours" wrapText="true" maxWidth="300" />
+                    </HBox>
+                </VBox>
+            </AnchorPane>
+
+            <!-- Formulaire d'ajout -->
+            <AnchorPane fx:id="formContainer" prefHeight="500" prefWidth="760" visible="false">
+                <!-- Titre -->
+                <Label layoutX="50" layoutY="30" text="Titre :" />
+                <TextField fx:id="titreField" layoutX="150" layoutY="25" prefWidth="400" />
+                <Label fx:id="titreErreurLabel" layoutX="150" layoutY="55" styleClass="erreur-label"/>
+
+                <!-- Description -->
+                <Label layoutX="50" layoutY="90" text="Description :" />
+                <TextField fx:id="descriptionField" layoutX="150" layoutY="85" prefWidth="400" />
+                <Label fx:id="descriptionErreurLabel" layoutX="150" layoutY="115" styleClass="erreur-label"/>
+
+                <!-- Nb Chapitres -->
+                <Label layoutX="50" layoutY="150" text="Nb Chapitres :" />
+                <TextField fx:id="nbChapitresField" layoutX="150" layoutY="145" prefWidth="400" />
+                <Label fx:id="nbChapitresErreurLabel" layoutX="150" layoutY="175" styleClass="erreur-label" />
+
+                <!-- Catégorie -->
+                <Label layoutX="50" layoutY="210" text="Catégorie :" />
+                <ComboBox fx:id="categorieCombo" layoutX="150" layoutY="205" prefWidth="400"/>
+
+                <!-- Fichier PDF -->
+                <Label layoutX="50" layoutY="260" text="Fichier PDF :" />
+                <Button layoutX="150" layoutY="255" onAction="#choisirPDF" text="Choisir un fichier..." />
+                <Label fx:id="pdfLabel" layoutX="300" layoutY="260" text="Aucun fichier sélectionné" />
+                <Label fx:id="pdfErreurLabel" layoutX="300" layoutY="290" styleClass="erreur-label"/>
+
+                <!-- Date -->
+                <Label layoutX="50" layoutY="320" text="Date :" />
+                <DatePicker fx:id="datePicker" layoutX="150" layoutY="315" prefWidth="400"/>
+
+                <!-- Boutons -->
+                <Button layoutX="150" layoutY="370" onAction="#enregistrerCours" text="Enregistrer" />
+                <Button layoutX="270" layoutY="370" onAction="#annulerAjout" text="Annuler" />
+            </AnchorPane>
+
+        </StackPane>
     </center>
 
 </BorderPane>

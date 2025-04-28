@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
-
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.DashboardController"
@@ -18,8 +17,7 @@
             <children>
                 <!-- Logo -->
                 <ImageView fitHeight="100" fitWidth="100" styleClass="image-view">
-
-                <image>
+                    <image>
                         <Image url="@/images/logo.png"/>
                     </image>
                 </ImageView>
@@ -28,31 +26,27 @@
                 <Label text="Bienvenue chez EDUPLAY" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
 
                 <!-- Boutons -->
-                <Button text="Home "  styleClass="button"/>
+                <Button text="Home" styleClass="button"/>
                 <Button text="Liste des Inscriptions" onAction="#goToListeInscriptions" styleClass="button"/>
                 <Button text="Liste des Cours" onAction="#goToListeCours" styleClass="button"/>
-                <Button text="Liste des Evaluations"  styleClass="button"/>
-                <Button text="Liste des Resultats"  styleClass="button"/>
-                <Button text="Liste des jeux "  styleClass="button"/>
-                <Button text="Liste des fedbacks "  styleClass="button"/>
-
+                <Button text="Liste des Cours (back)" onAction="#goToListeCoursback" styleClass="button"/>
+                <Button text="Liste des Evaluations" styleClass="button"/>
+                <Button text="Liste des Resultats" styleClass="button"/>
+                <Button text="Liste des jeux" styleClass="button"/>
+                <Button text="Chatbot" onAction="#showChatbot" styleClass="button"/>
             </children>
         </VBox>
     </left>
 
-    <!-- Contenu principal -->
+    <!-- Zone centrale dynamique -->
     <center>
-        <VBox alignment="CENTER" spacing="60">
-            <children>
-                <Label text="Bienvenue chez nous EDUPLAY" styleClass="label"/>
-                <ImageView fitWidth="200" preserveRatio="true">
-                    <image>
-                        <Image url="@/images/bienvenue.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </VBox>
-    </center>
+        <StackPane fx:id="mainContainer">
+            <!-- Contenu principal par défaut -->
+            <AnchorPane fx:id="contentPane" prefWidth="600.0" prefHeight="600.0"/>
 
+            <!-- Interface du chatbot (chargée dynamiquement) -->
+            <fx:include fx:id="chatbotContainer" source="chat.fxml" visible="false"/>
+        </StackPane>
+    </center>
 
 </BorderPane>

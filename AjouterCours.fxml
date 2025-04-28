@@ -23,6 +23,7 @@
          <!-- Champ Nb Chapitres -->
          <Spinner fx:id="nbChapitresSpinner" prefWidth="200" styleClass="input"/>
 
+
          <!-- Champ Catégorie -->
          <ChoiceBox fx:id="categorieChoiceBox" prefWidth="200" styleClass="input"/>
 
