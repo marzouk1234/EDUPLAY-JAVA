@@ -8,7 +8,7 @@ public class SMSService {
 
     // Twilio Account SID and Auth Token
     public static final String ACCOUNT_SID = "";
-    public static final String AUTH_TOKEN = "ed20f517b18a02524d1f9a04b644740f";
+    public static final String AUTH_TOKEN = "";
 
     // Twilio phone number (from your Twilio console)
     public static final String TWILIO_PHONE_NUMBER = "+18382311934";
