@@ -4,16 +4,16 @@ import Models.Event;
 import Services.EventService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Comparator;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,40 +21,88 @@ public class EventController {
 
     @FXML private ListView<Event> eventsListView;
     @FXML private Button supp;
-    @FXML private Button mod;
-    @FXML private Button tk;
+    @FXML private Button udp;
+    private  Event selectedEvent;
+    private static EventController instance;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> searchAttribute;
+    @FXML private Label statusLabel;
+    private String selectedAttribute = "Nom";
+
 
     private final EventService eventService = new EventService();
     private final ObservableList<Event> events = FXCollections.observableArrayList();
+    private final FilteredList<Event> filteredEvents = new FilteredList<>(events, p -> true);
 
-    // Initialisation principale
+
+    private void loadView(String fxmlPath, String title) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle(title);
+        stage.show();
+    }
     @FXML
     public void initialize() {
+       
         setupEventHandlers();
+        searchAttribute.getItems().clear();
+        searchAttribute.getItems().addAll("Nom", "Description", "Date");
+        searchAttribute.setValue("Nom"); // Valeur par défaut
+        searchAttribute.valueProperty().addListener((obs, oldVal, newVal) -> {
+            selectedAttribute = newVal;
+            updateFilter();
+        });
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> updateFilter());
+
         loadEvents();
         configureListView();
     }
+    private void updateFilter() {
+        filteredEvents.setPredicate(event -> {
+            String searchText = searchField.getText().toLowerCase();
+            if (searchText.isEmpty()) return true; // Afficher tout si le champ est vide
 
-    // Configuration des gestionnaires d'événements
-    private void setupEventHandlers() {
-        supp.setOnAction(this::handleDeleteEvent);
-        mod.setOnAction(this::handleModifyEvent);
+
+            String attributeValue = switch (selectedAttribute) {
+                case "Nom" -> event.getNom() != null ? event.getNom().toLowerCase() : "";
+                case "Description" -> event.getDescription() != null ? event.getDescription().toLowerCase() : "";
+                case "Date" -> event.getDate() != null ? event.getDate().toLowerCase() : "";
+                default -> "";
+            };
+            return attributeValue.contains(searchText);
+        });
     }
 
-    // Chargement des événements depuis la base de données
+
+    public  Event getSelectedEvent() {
+        return selectedEvent;
+    }
+    public static EventController getInstance() {
+        if (instance == null) {
+            instance = new EventController();
+        }
+        return instance;
+    }
+
+    private void setupEventHandlers() {
+        supp.setOnAction(this::handleDeleteEvent);
+        udp.setOnAction(this::handleModifyEvent);
+    }
+
     private void loadEvents() {
         try {
             List<Event> eventsFromDB = eventService.getAll();
+            System.out.println("Événements récupérés : " + eventsFromDB); // Ajoutez ceci
             events.setAll(eventsFromDB);
         } catch (SQLException e) {
-            showAlert("Erreur SQL", "Échec du chargement : " + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
-    // Configuration de l'affichage de la ListView
     private void configureListView() {
-        eventsListView.setItems(events);
-        eventsListView.setCellFactory(lv -> new javafx.scene.control.ListCell<Event>() {
+        eventsListView.setItems(filteredEvents); // Utiliser la liste filtrée
+        eventsListView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Event event, boolean empty) {
                 super.updateItem(event, empty);
@@ -63,7 +111,6 @@ public class EventController {
         });
     }
 
-    // Formatage du texte pour chaque événement
     private String formatEventText(Event event) {
         return String.format(
                 "Nom: %s\nDescription: %s\nDate: %s\nImage: %s",
@@ -74,37 +121,30 @@ public class EventController {
         );
     }
 
-    // Gestion de la modification d'événement
     @FXML
     private void handleModifyEvent(ActionEvent event) {
-        Event selectedEvent = eventsListView.getSelectionModel().getSelectedItem();
-
+        selectedEvent = eventsListView.getSelectionModel().getSelectedItem();
         if (selectedEvent != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateEvent.fxml"));
                 Parent root = loader.load();
-
                 UpdateEvent controller = loader.getController();
-                controller.initData(selectedEvent, this);
-
+                controller.initData(selectedEvent, this); // <-- "this" suffit
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Modifier l'événement");
                 stage.show();
-
             } catch (IOException e) {
-                showAlert("Erreur d'interface", "Impossible d'ouvrir l'éditeur", Alert.AlertType.ERROR);
+                showAlert("Erreur", "Impossible d'ouvrir l'éditeur", Alert.AlertType.ERROR);
             }
         } else {
-            showAlert("Aucune sélection", "Veuillez sélectionner un événement à modifier", Alert.AlertType.WARNING);
+            showAlert("Aucune sélection", "Veuillez sélectionner un événement", Alert.AlertType.WARNING);
         }
+
     }
 
-    // Gestion de la suppression d'événement
     @FXML
     private void handleDeleteEvent(ActionEvent event) {
         Event selectedEvent = eventsListView.getSelectionModel().getSelectedItem();
-
         if (selectedEvent != null) {
             try {
                 eventService.delete(selectedEvent);
@@ -118,13 +158,18 @@ public class EventController {
         }
     }
 
-    // Méthode pour rafraîchir la liste
     public void refreshEvents() {
         loadEvents();
         eventsListView.refresh();
     }
+    @FXML
+    private void sortByDate(ActionEvent event) {
 
-    // Affichage des alertes standardisées
+        events.sort(Comparator.comparing(Event::getDate));
+
+        eventsListView.setItems(events);
+    }
+
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -6,14 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-public class Test extends Application { // Hérite de Application
+public class Test extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        // Charge le fichier FXML
-        Parent root = FXMLLoader.load(getClass().getResource("/event.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        // Charge le fichier FXML du dashboard principal
+        Parent root = FXMLLoader.load(getClass().getResource("/dashboard.fxml"));
 
         // Configure la scène
         Scene scene = new Scene(root, 800, 600);

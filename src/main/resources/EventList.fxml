@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.EventController"
+            styleClass="root-pane">
+
+   <!-- Header Bar -->
+   <HBox styleClass="header-bar" prefHeight="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label text="Liste des Événements" styleClass="header-label"/>
+   </HBox>
+
+   <!-- Main container -->
+   <VBox spacing="20" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0" AnchorPane.bottomAnchor="20.0">
+
+      <!-- Search Bar -->
+      <HBox spacing="10" alignment="CENTER_LEFT">
+         <ComboBox fx:id="searchAttribute" prefWidth="150" styleClass="combo-box"/>
+         <TextField fx:id="searchField" promptText="Rechercher" prefWidth="540" styleClass="text-field"/>
+         <Button text="Sort by Date" onAction="#sortByDate" />
+      </HBox>
+
+      <!-- Event List -->
+      <ListView fx:id="eventsListView" prefHeight="400.0" styleClass="list-view"/>
+
+      <!-- Buttons -->
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+         <Button fx:id="udp" text="Modifier" styleClass="button, action-button"/>
+         <Button fx:id="supp" text="Supprimer" styleClass="button, action-button"/>
+      </HBox>
+   </VBox>
+
+</AnchorPane>

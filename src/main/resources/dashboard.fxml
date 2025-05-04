@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DashboardController">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: #2C3E50; -fx-padding: 20;">
+            <children>
+                <!-- Logo -->
+                <ImageView fitHeight="100" fitWidth="100">
+                    <image>
+                        <Image url="@images/logo.png" />
+                    </image>
+                </ImageView>
+
+                <!-- Titre -->
+                <Label style="-fx-text-fill: white; -fx-font-size: 20px;" text="Bienvenue sur EDUPLAY" />
+
+                <!-- Section Event -->
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Événements" />
+                <Button onAction="#goToCreateEvent" styleClass="button" text="Créer un événement" />
+                <Button onAction="#goToEventList" styleClass="button" text="Liste des événements" />
+
+
+                <!-- Section Ticket -->
+                <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" text="Tickets" />
+                <Button onAction="#goToCreateTicket" styleClass="button" text="Créer un ticket" />
+
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Zone dynamique -->
+    <center>
+        <AnchorPane fx:id="contentPane" />
+    </center>
+</BorderPane>

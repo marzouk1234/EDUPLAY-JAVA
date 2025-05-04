@@ -1,0 +1,106 @@
+/* Root pane with gradient background */
+.root-pane {
+    -fx-background-color: linear-gradient(to bottom right, #74ebd5, #acb6e5); /* Vibrant gradient matching the screenshot */
+    -fx-font-family: "Roboto", sans-serif;
+}
+
+/* Header bar */
+.header-bar {
+    -fx-background-color: #2c3e50; /* Dark blue header */
+    -fx-padding: 15;
+    -fx-alignment: center-left;
+}
+
+.header-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* Style for inputs (TextField, ComboBox) */
+.text-field, .combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dfe6e9;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease;
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #0984e3;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Style for the ListView */
+.list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+    -fx-opacity: 1; /* Ensure the ListView is fully visible by default */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+    /* Optional: Uncomment the line below if you still want the fade-in animation */
+    /* -fx-animation: fadeIn 1s forwards; */
+}
+
+/* Define the fade-in animation (optional) */
+@keyframes fadeIn {
+    from { -fx-opacity: 0; }
+    to { -fx-opacity: 1; }
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #e84393; /* Pink selection to match the buttons */
+    -fx-text-fill: #ffffff; /* White text for contrast */
+    -fx-transition: -fx-background-color 0.3s ease;
+}
+
+.list-cell:even {
+    -fx-background-color: #f5f6fa; /* Light gray for even rows */
+}
+
+.list-cell:odd {
+    -fx-background-color: #ffffff; /* White for odd rows */
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2d3436; /* Dark text for readability */
+    -fx-transition: all 0.3s ease;
+}
+
+.list-cell:hover {
+    -fx-background-color: #dfe6e9; /* Light gray on hover */
+}
+
+/* Style for buttons */
+.button, .action-button {
+    -fx-background-color: #e84393; /* Vibrant pink matching the screenshot */
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease;
+    -fx-cursor: hand;
+}
+
+.button:hover, .action-button:hover {
+    -fx-background-color: #d63031; /* Vibrant red on hover */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-rotate: 2;
+}
+
+/* Error labels (if needed) */
+.erreur-label, .error-label {
+    -fx-text-fill: #d63031;
+    -fx-font-size: 12px;
+}

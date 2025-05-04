@@ -28,7 +28,7 @@ public class EventService implements IService<Event> {
             pstmt.setString(1, event.getNom());         // Premier "?"
             pstmt.setString(2, event.getDescription()); // Deuxième "?"
             pstmt.setString(3, event.getDate());        // Troisième "?"
-            pstmt.setString(4, event.getIMG());         // Quatrième "?"
+            pstmt.setBytes(4, event.getIMG());        // Quatrième "?"
 
             pstmt.executeUpdate(); // Exécuter la requête
         }
@@ -42,7 +42,7 @@ public class EventService implements IService<Event> {
             pstmt.setString(1, event.getNom());
             pstmt.setString(2, event.getDescription());
             pstmt.setString(3, event.getDate());
-            pstmt.setString(4, event.getIMG());
+            pstmt.setBytes(4, event.getIMG());
             pstmt.setInt(5, event.getId());
 
             pstmt.executeUpdate();
@@ -69,7 +69,7 @@ public class EventService implements IService<Event> {
             event.setNom(rs.getString("nom"));
             event.setDescription(rs.getString("description"));
             event.setDate(rs.getString("date"));
-            event.setIMG(rs.getString("IMG"));
+            event.setIMG(rs.getBytes("IMG"));
             events.add(event);
         }
         return events;
